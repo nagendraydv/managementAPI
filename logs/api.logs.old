@@ -1,0 +1,17 @@
+[2020-05-25 13:51:49 +0530] [16606] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/arbiter.py", line 586, in spawn_worker
+    worker.init_process()
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/workers/base.py", line 135, in init_process
+    self.load_wsgi()
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/workers/base.py", line 144, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/root/anaconda3/lib/python3.7/site-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+ModuleNotFoundError: No module named 'api'

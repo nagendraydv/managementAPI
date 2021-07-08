@@ -1,0 +1,286 @@
+import falcon, json
+from mintloan_utils import DB, generate, validate, utils, datetime, timedelta
+from pypika import Query, Table, JoinType, functions, Order
+import requests
+from dateutil.relativedelta import relativedelta
+
+
+class ClientRegisterResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        
+        try:
+            raw_json = req.stream.read()
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Error', ex.message) 
+
+    def on_post(self, req, resp):
+        """Handles POST requests"""
+        output_dict = {"data":{"customerClientID":""}, "msgHeader":{"authToken" : ""} }
+        errors = utils.errors
+        success = ""
+        logInfo = {'api': 'clientRegistration'}
+        try:
+            raw_json = req.stream.read()
+            input_dict = json.loads(raw_json, encoding='utf-8')
+            utils.logger.debug("Request: " + json.dumps(input_dict), extra=logInfo)
+        except Exception as ex:
+            raise #falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+        try:
+            if not validate.Request(api='clientRegister2', request=input_dict):
+                output_dict["data"].update({"error":1, "message":errors["json"]})
+                resp.body = json.dumps(output_dict)
+            else:
+                db = DB(input_dict["msgHeader"]["authLoginID"])
+                val_error = validate(db).basicChecks(token=input_dict["msgHeader"]["authToken"], loginID = input_dict["msgHeader"]["authLoginID"], 
+                                                     checkLogin=True)
+                if val_error:
+                    output_dict["data"].update({"error":1, "message":val_error})
+                    resp.body = json.dumps(output_dict)
+                else:
+                    custcred = Table("mw_customer_login_credentials", schema="mint_loan")
+                    custmap = Table("mw_customer_login_credentials_map", schema="mint_loan")
+                    clientmaster = Table("mw_finflux_client_master", schema="mint_loan")
+                    profile = Table("mw_client_profile", schema="mint_loan")
+                    aadhar = Table("mw_aadhar_kyc_details", schema="mint_loan")
+                    conf = Table("mw_configuration", schema="mint_loan_admin")
+                    conf2 = Table("mw_configuration", schema="mint_loan")
+                    cvalues = Table("mw_finflux_attribute_code_values", schema="mint_loan")
+                    pan = Table("mw_pan_status", schema="mint_loan")
+                    charges = Table("mw_charges_master", schema="mint_loan")
+                    custbank = Table("mw_cust_bank_detail", schema="mint_loan")
+                    loanmaster = Table("mw_client_loan_master", schema="mint_loan")
+                    loandetails = Table("mw_client_loan_details", schema="mint_loan")
+                    loanprod = Table("mw_finflux_loan_product_master", schema="mint_loan")
+                    join = Query.from_(custcred).join(clientmaster, how=JoinType.left).on_field("CUSTOMER_ID").join(aadhar, how=JoinType.left)
+                    join = join.on_field("CUSTOMER_ID").join(profile, how=JoinType.left).on_field("CUSTOMER_ID")
+                    q = join.select(custcred.CUSTOMER_ID,custcred.LOGIN_ID,custcred.ACCOUNT_STATUS,custcred.FAIL_ATTEMPT,custcred.PIN_UPDATED_DATE,
+                                    custcred.LAST_LOGIN,custcred.REGISTERED_IP_ADDRESS,custcred.LAST_LOGGED_IN_IP_ADDRESS,custcred.DEVICE_ID,
+                                    custcred.CREATED_DATE, clientmaster.CLIENT_ID,clientmaster.FULL_NAME, clientmaster.LENDER,
+                                    clientmaster.ACCOUNT_NO,clientmaster.ACTIVATION_DATE,aadhar.NAME,aadhar.DOB,aadhar.GENDER,aadhar.AADHAR_NO,
+                                    functions.Concat(aadhar.HOUSE," ",aadhar.STREET," ",aadhar.LM," ",aadhar.LC," ",aadhar.VTC," ",aadhar.DISTRICT,
+                                                     " ",aadhar.POST_OFFICE," ",aadhar.STATE," ",aadhar.PIN_CODE).as_("ADDRESS"), 
+                                    profile.NAME.as_("PROFILE_NAME"))
+                    q = q.where(custcred.CUSTOMER_ID==input_dict['data']['customerID'])
+                    Fields = db.runQuery(q)
+                    lender = ("GETCLARITY" if (input_dict["data"]["lender"]=="GETCLARITY" if "lender" in input_dict["data"] else False)
+                              else "CHAITANYA")
+                    urlKey = ("MIFOS_URL" if lender=="GETCLARITY" else "FINFLUX_URL")
+                    baseurl = db.runQuery(Query.from_(conf).select("CONFIG_VALUE").where(conf.CONFIG_KEY==urlKey))
+                    custID = input_dict['data']['customerID']
+                    today = datetime.now().strftime("%d %B %Y")
+                    Wednesday = (datetime.now() + timedelta(days=(9 - datetime.now().weekday()))).strftime("%d %B %Y")
+                    nextMonth = (datetime.now() + timedelta(days=-datetime.now().day+1) + relativedelta(months=1)).strftime("%d %B %Y")
+                    if Fields["data"] and custID!=0 and baseurl["data"]:
+                        if (not filter(lambda x:x["LENDER"]==input_dict["data"]["lender"], Fields["data"])):
+                            data = Fields["data"][0]
+                            baseurl = baseurl["data"][0]["CONFIG_VALUE"]
+                            if lender=="GETCLARITY":
+                                headers = (utils.finflux_headers[lender] if lender in utils.finflux_headers else {})
+                                auth = utils.mifos_auth
+                            else:                               
+                                tokenKey = "MintwalkFinfluxAccessToken" if lender=="GETCLARITY" else "FinfluxAccessToken"
+                                params = Query.from_(conf2).select("CONFIG_KEY", "CONFIG_VALUE").where(conf2.CONFIG_KEY.isin([tokenKey]))
+                                params = {"FinfluxAccessToken":ele["CONFIG_VALUE"] for ele in db.runQuery(params)["data"]}
+                                headers = utils.mergeDicts((utils.finflux_headers[lender] if lender in utils.finflux_headers else {}), 
+                                                           {"Authorization":"bearer " + params["FinfluxAccessToken"]})
+                            name = data["NAME"].rstrip(" ") if data["NAME"] else data["PROFILE_NAME"].strip(" ")
+                            payload = {"officeId":(1 if lender=="GETCLARITY" else 198),
+                                       "firstname":" ".join(name.split(" ")[0:-1]) if len(name.split(" "))>1 else name, 
+                                       "lastname":name.split(" ")[-1], "externalId":"000000" + custID, "dateFormat":"dd MMMM yyyy", 
+                                       "locale":"en", "active":True, "activationDate":today, "submittedOnDate":today}
+                            utils.logger.info("FINFLUX api POST URL: " + baseurl + "clients", extra=logInfo)
+                            utils.logger.info("api request: " + json.dumps(payload) + " \n\t\t\tHeaders:" + json.dumps(headers), extra=logInfo)
+                            if lender=="GETCLARITY":
+                                r = requests.post(baseurl + "clients", data=json.dumps(payload), headers=headers, auth=auth, verify=False)
+                            else:
+                                r = requests.post(baseurl + "clients", data=json.dumps(payload), headers=headers, verify=False)
+                            utils.logger.info("api response: " + json.dumps(r.json()), extra=logInfo)
+                            if 'clientId' in r.json():
+                                clientId = str(r.json()['clientId'])
+                                inserted = db.Insert(db='mint_loan', table='mw_finflux_client_master', CUSTOMER_ID=custID,
+                                                     LENDER=lender, CLIENT_ID=clientId, FULL_NAME=payload['firstname'] + " " + payload['lastname'], 
+                                                     ACTIVE='1', ACTIVATION_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), CREATED_BY='Admin', 
+                                                     CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), date=False, compulsory=False)
+                                ldata = db.runQuery(Query.from_(loanmaster).select(loanmaster.star).where((loanmaster.CUSTOMER_ID==custID) & 
+                                                                                                          (loanmaster.STATUS=="REQUESTED") &
+                                                                                                          (loanmaster.LENDER==lender)))
+                                if ldata["data"]:
+                                    ldata = ldata["data"][0]
+                                    q = Query.from_(loanprod).select("NUMBER_OF_REPAYMENTS", "REPAY_EVERY", "REPAYMENT_PERIOD_FREQUENCY_TYPE", 
+                                                                     "CHARGE_ID", "CHARGE_AMOUNT", "TERM_FREQUENCY", "TERM_PERIOD_FREQUENCY_ENUM",
+                                                                     "AMORTIZATION_TYPE", "INTEREST_CALCULATION_PERIOD_TYPE",
+                                                                     "INTEREST_RATE_PER_PERIOD", "INTEREST_TYPE",
+                                                                     "TRANSACTION_PROCESSING_STRATEGY_ID")
+                                    prodInfo = db.runQuery(q.where((loanprod.PRODUCT_ID==ldata["LOAN_PRODUCT_ID"]) & (loanprod.LENDER==lender) & (loanprod.LIMIT_TYPE!="INSURANCE_LOAN_LIMIT")))
+                                    if prodInfo["data"]:
+                                        prodInfo = prodInfo["data"][0]
+                                        c = Query.from_(charges).select(charges.star).where(charges.LENDER==lender)
+                                        c = c.where(charges.PRODUCT_ID==ldata["LOAN_PRODUCT_ID"])
+                                        if lender=="GETCLARITY":
+                                            chargeList = [{"chargeId":ele["CHARGE_ID"],"amount":ele["ACTUAL_AMOUNT"]}
+                                                          for ele in db.runQuery(c)["data"]]
+                                        else:
+                                            chargeList = [{"chargeId":ele["CHARGE_ID"],"amount":ele["ACTUAL_AMOUNT"],"locale":"en",
+                                                           "dateFormat":"dd MMMM yyyy"} for ele in db.runQuery(c)["data"]]
+                                        payload = {"submittedOnDate":today, "clientId":clientId, "loanProductId":int(ldata["LOAN_PRODUCT_ID"]),
+                                                   "loanAmountRequested":ldata["AMOUNT"], "loanPurposeId":((794 if ldata["AMOUNT"]==5500 else 630) if lender=="GETCLARITY" else 319),
+                                                   "loanEMIPackId": ldata["EMI_PACK_ID"] if (ldata["EMI_PACK_ID"] not in ["0", "1", "2", "3", "651"]) else None,
+                                                   "repayEvery":prodInfo["REPAY_EVERY"], "numberOfRepayments":prodInfo["NUMBER_OF_REPAYMENTS"],
+                                                   "termFrequency":prodInfo["TERM_FREQUENCY"],
+                                                   "termPeriodFrequencyEnum":prodInfo["REPAYMENT_PERIOD_FREQUENCY_TYPE"],
+                                                   "repaymentPeriodFrequencyEnum":prodInfo["REPAYMENT_PERIOD_FREQUENCY_TYPE"], 
+                                                   "expectedDisbursalPaymentType":1 if lender=="GETCLARITY" else 751,
+                                                   "expectedRepaymentPaymentType":1 if lender=="GETCLARITY" else 751, "charges": chargeList,
+                                                   "accountType":"individual", "locale":"en", "dateFormat":"dd MMMM yyyy",
+                                                   "amortizationType":prodInfo["AMORTIZATION_TYPE"], "interestType":prodInfo["INTEREST_TYPE"],
+                                                   "interestCalculationPeriodType":prodInfo["INTEREST_CALCULATION_PERIOD_TYPE"],
+                                                   "interestRatePerPeriod":prodInfo["INTEREST_RATE_PER_PERIOD"],
+                                                   "transactionProcessingStrategyId":prodInfo["TRANSACTION_PROCESSING_STRATEGY_ID"]}
+                                        if lender=="GETCLARITY":
+                                            emi = "470" if payload["loanAmountRequested"] in (5500, "5500") else "845" if payload["loanAmountRequested"] in (2500, "2500") else None
+                                            payload["loanType"]=payload.pop("accountType")
+                                            payload["productId"]=payload.pop("loanProductId")
+                                            payload["loanTermFrequency"]=payload.pop("termFrequency")
+                                            payload["loanTermFrequencyType"]=payload.pop("termPeriodFrequencyEnum")
+                                            payload["repaymentFrequencyType"]=payload.pop("repaymentPeriodFrequencyEnum")
+                                            payload["principal"]=payload.pop("loanAmountRequested")
+                                            payload["repaymentEvery"]=payload.pop("repayEvery")
+                                            junk = payload.pop("expectedRepaymentPaymentType")
+                                            junk = payload.pop("expectedDisbursalPaymentType")
+                                            payload.update({"allowPartialPeriodInterestCalcualtion":False, "expectedDisbursementDate":today,
+                                                            "fixedEmiAmount":ldata["EMI_AMOUNT"] if ldata["EMI_AMOUNT"]  else emi, "isEqualAmortization":False,
+                                                            "repaymentsStartingFromDate":(Wednesday if payload["repaymentFrequencyType"]!=2 else
+                                                                                          nextMonth), "fundId":"1"})
+                                        payload = {k:v for k,v in payload.items() if v is not None} 
+                                        utils.logger.info("FINFLUX api POST URL: " + baseurl + ("loans" if lender=="GETCLARITY"
+                                                                                                else "loanapplicationreferences"), extra=logInfo)
+                                        utils.logger.info("api request: " + json.dumps(payload), extra=logInfo)
+                                        if lender=="GETCLARITY":
+                                            r = requests.post(baseurl + "loans", data=json.dumps(payload), headers=headers, auth=auth,
+                                                              verify=False)
+                                        else:
+                                            r = requests.post(baseurl + "loanapplicationreferences", data=json.dumps(payload), headers=headers,
+                                                              verify=False)
+                                        utils.logger.info("api response: " + json.dumps(r.json()), extra=logInfo)
+                                        if 'resourceId' in r.json():
+                                            if lender=="GETCLARITY":
+                                                r2 = requests.get(baseurl + "loans/" + str(r.json()['resourceId']), headers=headers, auth=auth,
+                                                              data=json.dumps({}), verify=False)
+                                            else:
+                                                r2 = requests.get(baseurl + "loanapplicationreferences/" + str(r.json()['resourceId']),
+                                                                  headers=headers, data=json.dumps({}), verify=False)
+                                            resp2 = r2.json()
+                                            updated = db.Update(db='mint_loan', table='mw_client_loan_master', checkAll=False,
+                                                                LOAN_REFERENCE_ID=None if lender=="GETCLARITY" else str(r.json()['resourceId']),
+                                                                LOAN_ACCOUNT_NO=None if lender!="GETCLARITY" else str(r.json()['resourceId']),
+                                                                STATUS="PENDING", LOAN_PRODUCT_ID=ldata["LOAN_PRODUCT_ID"],
+                                                                LOAN_APPLICATION_NO=(str(resp2["loanApplicationReferenceNo"])
+                                                                                     if lender!="GETCLARITY" else None),
+                                                                LOAN_REQUEST_DATE=datetime.now().strftime("%Y-%m-%d"), 
+                                                                conditions={"ID = ":str(ldata["ID"])})
+                                            input_dict = {"LOAN_MASTER_ID":str(ldata["ID"]),
+                                                          "PRINCIPAL":(str(resp2["principal"]) if lender=="GETCLARITY"
+                                                                       else str(resp2["loanAmountRequested"])),  
+                                                          "TERM_FREQUENCY":str(resp2["termFrequency"]),
+                                                          "STATUS": resp2["status"]["value"], "LOAN_TYPE":"Individual", "CREATED_BY":"CRON", 
+                                                          "CREATED_DATE": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+                                            check = Query.from_(loandetails).select("LOAN_MASTER_ID")
+                                            check = db.runQuery(check.where(loandetails.LOAN_MASTER_ID==str(ldata["ID"])))
+                                            if not check["data"]:
+                                                db.Insert(db="mint_loan", table="mw_client_loan_details", compulsory=False, date=False, 
+                                                          **input_dict)
+                                try:
+                                    dob = datetime.strptime(Fields["data"][0]["DOB"],"%d-%m-%Y").strftime("%d %B %Y")
+                                except:
+                                    dob = None
+                                try:
+                                    q = Query.from_(cvalues).select(cvalues.VALUE_ID)
+                                    gender = db.runQuery(q.where(cvalues.VALUE_NAME==("Female" if Fields["data"][0]["GENDER"]=='F' else "Male")))
+                                    genderID = int(gender["data"][0]["VALUE_ID"]) if gender["data"] else None
+                                    payload = {"locale":"en", "dateFormat":"dd MMMM yyyy", "dateOfBirth":dob, #"maritalStatusId":912,
+                                               "genderId":genderID, "clientTypeId":760, "clientClassificationId":836, 
+                                               "mobileNo":data["LOGIN_ID"][-10:]}
+                                    utils.logger.info("FINFLUX api PUT URL: " + baseurl + "clients/" + clientId, extra=logInfo)
+                                    utils.logger.info("api request: " + json.dumps(payload), extra=logInfo)
+                                    if lender=="GETCLARITY":
+                                        r = requests.put(baseurl + "clients/" + clientId, headers=headers, auth=auth, verify=False,
+                                                     data=json.dumps({k:v for k,v in payload.items() if v is not None}))
+                                    else:
+                                        r = requests.put(baseurl + "clients/" + clientId, headers=headers, verify=False,
+                                                         data=json.dumps({k:v for k,v in payload.items() if v is not None}))
+                                    utils.logger.info("api response: " + json.dumps(r.json()), extra=logInfo)
+                                    pan = Query.from_(pan).select("PAN_NO").where((pan.CUSTOMER_ID==Fields["data"][0]["CUSTOMER_ID"]) 
+                                                                                  & (pan.ARCHIVED=='N')).orderby(pan.CREATED_DATE,order=Order.desc)
+                                    pan = db.runQuery(pan)
+                                    if pan["data"]:
+                                        payload = {"documentTypeId": 776, "status": 200, "documentKey": pan["data"][0]["PAN_NO"]}
+                                        utils.logger.info("FINFLUX api POST URL: " + baseurl + "clients/" + clientId + "/identifiers",
+                                                          extra=logInfo)
+                                        utils.logger.info("api request: " + json.dumps(payload), extra=logInfo)
+                                        if lender=="GETCLARITY":
+                                            payload["status"] = "Active"
+                                            r = requests.post(baseurl + "clients/" + clientId + "/identifiers", data=json.dumps(payload),auth=auth,
+                                                              headers=headers, verify=False)
+                                        else:
+                                            r = requests.post(baseurl + "clients/" + clientId + "/identifiers", data=json.dumps(payload),
+                                                              headers=headers, verify=False)
+                                        utils.logger.info("api response: " + json.dumps(r.json()), extra=logInfo)
+                                    if data["AADHAR_NO"]:
+                                        payload = {"documentTypeId": 3, "status": 200, "documentKey": data["AADHAR_NO"].replace(" ","")}
+                                        utils.logger.info("FINFLUX api POST URL: " + baseurl + "clients/" + clientId + "/identifiers", extra=logInfo)
+                                        utils.logger.info("api request: " + json.dumps(payload), extra=logInfo)
+                                        if lender=="GETCLARITY":
+                                            payload["status"] = "Active"
+                                            r = requests.post(baseurl + "clients/" + clientId + "/identifiers", data=json.dumps(payload),auth=auth,
+                                                              headers=headers, verify=False)
+                                        else:
+                                            r = requests.post(baseurl + "clients/" + clientId + "/identifiers", data=json.dumps(payload),
+                                                              verify=False, headers=headers)
+                                        utils.logger.info("api response: " + json.dumps(r.json()), extra=logInfo)
+                                    bankDetails = db.runQuery(Query.from_(custbank).select(custbank.star).where(custbank.CUSTOMER_ID==custID))
+                                    if bankDetails["data"] and lender!="GETCLARITY":
+                                        bDetails = bankDetails["data"][0]
+                                        name = (bDetails["ACCOUNT_HOLDER_NAME"] if bDetails["ACCOUNT_HOLDER_NAME"] else data["NAME"].rstrip(" ")
+                                                if data["NAME"] else data["PROFILE_NAME"].strip(" "))
+                                        payload = {"name": name, "accountNumber":bDetails["ACCOUNT_NO"],"ifscCode":bDetails["IFSC_CODE"],
+                                                   "mobileNumber":data["LOGIN_ID"][-10:], "bankName":bDetails["BANK_NAME"][0:20],
+                                                   "bankCity":bDetails["CITY"], "branchName":bDetails["BRANCH"], "accountTypeId":1, 
+                                                   "lastTransactionDate":today, "locale":"en", "dateFormat":"dd MMMM yyyy"}
+                                        utils.logger.info("FINFLUX api POST URL: " + baseurl + "clients/" + clientId + "/bankaccountdetail", 
+                                                          extra=logInfo)
+                                        utils.logger.info("api request: " + json.dumps(payload), extra=logInfo)
+                                        r = requests.post(baseurl + "clients/" + clientId + "/bankaccountdetail", data=json.dumps(payload), 
+                                                          headers=headers, verify=False)
+                                        utils.logger.info("api response: " + json.dumps(r.json()), extra=logInfo)
+                                except:
+                                    pass
+                                if inserted:
+                                    token = generate(db).AuthToken()
+                                    if token["updated"]:
+                                        output_dict["data"].update({"customerClientID": clientId})
+                                        output_dict["data"].update({"error":0, "message":success})
+                                        output_dict["msgHeader"]["authToken"] = token["token"]
+                                    else:
+                                        output_dict["data"].update({"error":1, "message":errors["token"]})
+                                else:
+                                    output_dict["data"].update({"error":1, "message":errors["query"]})
+                            else:
+                                output_dict["data"].update({"error":1, 
+                                                            "message":r.json()['defaultUserMessage'] if 'defaultUserMessage' in r.json() 
+                                                            else "some error occured"})
+                        else:
+                            output_dict["data"].update({"error":1, "message":"Customer already registered or Aadhar KYC not done"})
+                    else:
+                        output_dict["data"].update({"error":1, "message":"No data found for the customer"})
+                resp.body = json.dumps(output_dict)
+                utils.logger.debug("Response: " + json.dumps(output_dict) + "\n", extra=logInfo)
+                db._DbClose_()
+        except Exception as ex:
+            utils.logger.error("ExecutionError: ", extra=logInfo, exc_info=True)
+            raise falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+
+
+
+

@@ -1,0 +1,214 @@
+import falcon, json, requests
+from mintloan_utils import DB, generate, validate, utils, datetime, timedelta
+from pypika import Query, Table, JoinType, functions, Order
+
+class ClientUpdateResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        
+        try:
+            raw_json = req.stream.read()
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Error', ex.message) 
+
+    def on_post(self, req, resp):
+        """Handles POST requests"""
+        output_dict = {"msgHeader":{"authToken" : ""},"data":{"updated":""}}
+        errors = utils.errors
+        success = "Successfully updated"
+        logInfo = {'api': 'investorUpdate'}
+        try:
+            raw_json = req.stream.read()
+            input_dict = json.loads(raw_json, encoding='utf-8')
+            utils.logger.debug("Request: " + json.dumps(input_dict), extra=logInfo)
+        except Exception as ex:
+            utils.logger.error("ExecutionError: ", extra=logInfo, exc_info=True)
+            raise falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+        try:
+            if not validate.Request(api='clientUpdate', request=input_dict):
+                output_dict["data"].update({"error":1, "message":errors["json"]})
+                resp.body = json.dumps(output_dict)
+                utils.logger.error("Response: " + json.dumps(output_dict) + "\n", extra=logInfo)
+            else:
+                db = DB(input_dict["msgHeader"]["authLoginID"])       
+                val_error = validate(db).basicChecks(token=input_dict["msgHeader"]["authToken"])
+                usertype = Table("mw_admin_user_account_type", schema="mint_loan_admin")
+                q = db.runQuery(Query.from_(usertype).select("ACCOUNT_TYPE").where(usertype.LOGIN==input_dict["msgHeader"]["authLoginID"]))
+                accTypes = [ele["ACCOUNT_TYPE"] for ele in q["data"]]
+                if val_error:
+                    output_dict["data"].update({"error":1, "message":val_error})
+                    resp.body = json.dumps(output_dict)
+                    utils.logger.error("Response: " + json.dumps(output_dict) + "\n", extra=logInfo)
+                elif  ('CALLING' in accTypes) & (accTypes==[]):
+                    output_dict["data"].update({"error":0, "message":"data updation not allowed for your usertype"})
+                    resp.body = json.dumps(output_dict)
+                    utils.logger.error("Response: " + json.dumps(output_dict) + "\n", extra=logInfo)
+                else:
+                    custID = input_dict["data"]["customerID"]
+                    updated = {"clientDocument":[], "customerCredentials":"", "clientBank":"", "clientLoanLimit":"", "clientUberName":"",
+                               "clientUberNumber":"", "log":""}
+                    boolmap = {True:1, False:0}
+                    clientmaster = Table("mw_finflux_client_master", schema="mint_loan")
+                    loanmaster = Table("mw_client_loan_master", schema="mint_loan")
+                    conf = Table("mw_configuration", schema="mint_loan_admin")
+                    baseurl = db.runQuery(Query.from_(conf).select("CONFIG_VALUE").where(conf.CONFIG_KEY=="FINFLUX_URL"))
+                    baseurl = baseurl["data"][0]["CONFIG_VALUE"]
+                    for element in input_dict["data"]["update"]:
+			print element["updateType"]
+                        if element["updateType"]=="clientDocument":
+                            utils.logger.info("Updating document verification status", extra=logInfo)
+                            updated["clientDocument"].append({"docSeqID":element["docSeqID"], 
+                                                              "success": 
+                                                              (boolmap[db.Update(db="mint_loan", table="mw_cust_kyc_documents", 
+                                                                                 DOCUMENT_TYPE_ID=(element["docTypeID"] if "docTypeID" in element
+                                                                                                   else None),
+
+                                                                                 DOCUMENT_COMMENTS=(element["comments"] 
+                                                                                                    if "comments" in element else None),
+                                                                                 VERIFICATION_STATUS=(element["verificationStatus"]
+                                                                                                      if "verificationStatus" in element else None),
+                                                                                 VERIFIED_BY=(input_dict["msgHeader"]["authLoginID"]
+                                                                                              if "verificationStatus" in element else None), 
+                                                                                 VERIFIED_ON=((datetime.utcnow() 
+                                                                                              + timedelta(seconds=19800)).strftime("%Y-%m-%d")
+                                                                                              if "verificationStatus" in element else None), 
+                                                                                 conditions={"CUSTOMER_ID = ":custID, 
+                                                                                             "DOC_SEQ_ID = ":str(element["docSeqID"])})]
+                                                               if ((element["verificationStatus"] if "verificationStatus" in element else False)
+                                                                   or (element["comments"] if "comments" in element else False) or (element["docTypeID"] if "docTypeID" in element else False)) else 1),
+                                                              "successBank":
+                                                              (boolmap[db.Update(db="mint_loan", table="mw_cust_bank_detail", 
+                                                                                 DOC_SEQ_ID=element["docSeqID"],
+                                                                                 conditions={"CUSTOMER_ID = ":custID, 
+                                                                                             "ACCOUNT_NO = ":str(element["accountNo"])})] 
+                                                               if (element["accountNo"] if "accountNo" in element else False) else 1 )
+                                                          })
+                        elif element["updateType"]=="custReject":
+                            utils.logger.info("Rejecting a customer", extra=logInfo)
+                            updated["customerCredentials"] = boolmap[ db.Update(db="mint_loan", table="mw_customer_login_credentials",
+                                                                                REJECTED="1", REJECTION_REASON=element["rejectedReason"],
+                                                                                STAGE="REJECTED", conditions={"CUSTOMER_ID = ":str(custID)}) ]
+                            clientID = db.runQuery(Query.from_(clientmaster).select("CLIENT_ID").where(clientmaster.CUSTOMER_ID==str(custID)))
+                            clientID = clientID["data"][0]["CLIENT_ID"] if clientID["data"] else None
+                            if clientID:
+                                if "undoReject" in element.keys():
+                                    if element["undoReject"]==0:
+                                        payload = {"rejectionReasonId":910, "rejectionDate":datetime.now().strftime("%d %B %Y"), "locale":"en",
+                                                   "dateFormat":"dd MMMM yyyy"}
+                                        r = requests.post(baseurl + "clients/" + clientID + "?command=reject", data=json.dumps(payload), 
+                                                          auth=utils.finflux_auth, headers=utils.finflux_headers, verify=False)
+                                        junk = db.Update(db="mint_loan", table="mw_client_loan_master", STATUS="ML_REJECTED", 
+                                                         conditions={"CUSTOMER_ID=":str(custID), "STATUS=":"REQUESTED"})
+                                    else:
+                                        payload = {"reopenedDate":datetime.now().strftime("%d %B %Y"), "locale":"en", "dateFormat":"dd MMMM yyyy"}
+                                        r = requests.post(baseurl + "clients/" + clientId + "?command=undoRejection", data=json.dumps(payload), 
+                                                          auth=utils.finflux_auth, headers=utils.finflux_headers, verify=False)
+                        elif element["updateType"]=="lowIncomeStage":
+                            utils.logger.info("Retaining low income stage for the customer", extra=logInfo)
+                            updated["log"] = boolmap[ db.Update(db="mint_loan", table="mw_customer_change_log", 
+                                                                RETAINED_BY=input_dict["msgHeader"]["authLoginID"],
+                                                                RETAINED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                                                conditions = {"DATA_VALUE=":"LOW_INCOME", "CUSTOMER_ID =":str(custID)})]
+                        elif element["updateType"]=="customerCredentials":
+                            utils.logger.info("Updating account status", extra=logInfo)
+                            allowedUsers = ["shiv@mintwalk.com", "nikhil@mintwalk.com", "uber-kurla", "dharam@mintwalk.com"]
+                            cheques = (element["cheques"] if (("cheques" in element) & (input_dict["msgHeader"]["authLoginID"] in allowedUsers))
+                                       else None)
+                            lacc = Query.from_(loanmaster).select(loanmaster.LOAN_REFERENCE_ID).where((loanmaster.STATUS.isin(['PENDING', 'WAITING_FOR_DISBURSA'])) & 
+                                                                                                      (loanmaster.CUSTOMER_ID==custID))
+                            lacc = db.runQuery(lacc)["data"]
+                            if (lacc) or (element["stage"]!="LOAN_APPROVED" if "stage" in element else True):
+                                updated["customerCredentials"] = boolmap[ db.Update(db="mint_loan", table="mw_customer_login_credentials", 
+                                                                                    ACCOUNT_STATUS=(element["accountStatus"]
+                                                                                                    if "accountStatus" in element else None),
+                                                                                    FAIL_ATTEMPT=0, CHEQUES=cheques,
+                                                                                    DOCUMENT_COMMENTS=(element["docComments"]
+                                                                                                       if "docComments" in element else None),
+                                                                                    COMMENTS=(element["comments"] if "comments" in element else None),
+                                                                                    STAGE=(element["stage"] if "stage" in element else None),
+                                                                                    conditions={"CUSTOMER_ID = ":custID}) ]
+                            else:
+                                updated["customerCredentials"] = 0
+                            if ("stage" in element) and (updated["customerCredentials"]==1):
+                                junk = db.Insert(db="mint_loan", table="mw_customer_change_log", date=False, compulsory=False, CUSTOMER_ID=custID,
+                                                 DATA_KEY="STAGE", DATA_VALUE=element["stage"], CREATED_BY=input_dict["msgHeader"]["authLoginID"],
+                                                 CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                                 LOAN_REFERENCE_ID=lacc[0]["LOAN_REFERENCE_ID"] if lacc else None,
+                                                 COMMENTS=(element["comments"] if "comments" in element else None))
+                        elif element["updateType"]=="clientBank":
+                            utils.logger.info("Updating bank information", extra=logInfo)
+                            expKeys = ["ACTIVE_STATUS_FLAG", "DEFAULT_STATUS_FLAG", "DELETE_STATUS_FLAG", "PERSONAL_ACCOUNT_FLAG", "DOC_SEQ_ID",
+                                       "ACCOUNT_NO", "IFSC_CODE", "BANK_NAME", "BRANCH", "CITY", "COMMON_ACCT_NO", "ACCOUNT_HOLDER_NAME"]
+                            payload = {"accountNumber":element["ACCOUNT_NO"] if "ACCOUNT_NO" in element else None,
+                                       "ifscCode":element["IFSC_CODE"] if "IFSC_CODE" in element else None, "locale":"en", 
+                                       "bankName":element["BANK_NAME"] if "BANK_NAME" in element else None, "dateFormat":"dd MMMM yyyy",
+                                       "bankCity":element["CITY"] if "CITY" in element else None,
+                                       "accountHolderName":element["ACCOUNT_HOLDER_NAME"] if "ACCOUNT_HOLDER_NAME" in element else None,
+                                       "branchName":element["BRANCH"] if "BRANCH" in element else None}
+                            payload = {k:v for k,v in payload.items() if v is not None}
+                            inputDict = {key:element[utils.camelCase(key)] for key in [k for k in expKeys if utils.camelCase(k) in element.keys()]}
+                            updated["clientBank"] = boolmap[ db.Update(conditions={"CUSTOMER_ID = ":custID, "ID = ":str(element["bankID"])}, 
+                                                                       db="mint_loan", table="mw_cust_bank_detail", **inputDict)]
+                            if (updated["clientBank"]==1):
+                                for key in element:
+                                    junk = db.Insert(db="mint_loan", table="mw_customer_change_log", date=False, compulsory=False,
+                                                     CUSTOMER_ID=custID, DATA_KEY=key, DATA_VALUE=element[key],
+                                                     CREATED_BY=input_dict["msgHeader"]["authLoginID"],
+                                                     CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                        elif element["updateType"]=="loanLimit":
+                            utils.logger.info("Updating loan limit", extra=logInfo)
+                            updated["clientLoanLimit"] = boolmap[ db.Update(db="mint_loan", table="mw_client_loan_limit", 
+                                                                            conditions={"CUSTOMER_ID = ":custID}, LOAN_LIMIT=element["loanLimit"],
+                                                                            COMMENTS=element["comments"])]
+                            if (updated["clientLoanLimit"]==1):
+                                junk = db.Insert(db="mint_loan", table="mw_customer_change_log", date=False, compulsory=False, CUSTOMER_ID=custID,
+                                                 DATA_KEY="LOAN_LIMIT", DATA_VALUE=element["loanLimit"], COMMENTS=element["comments"],
+                                                 CREATED_BY=input_dict["msgHeader"]["authLoginID"],
+                                                 CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                        elif element["updateType"]=="uberNumber":
+                            vBy = input_dict["msgHeader"]["authLoginID"]
+                            utils.logger.info("Updating uber number verification status", extra=logInfo)
+                            updated["clientUberNumber"] = boolmap[db.Update(db="mint_loan", table="mw_client_profile", 
+                                                                            conditions={"CUSTOMER_ID = ":custID}, NUMBER_VERIFIED_BY=vBy,
+                                                                            NUMBER_VERIFIED=element["numberVerified"],
+                                                                            NUMBER_COMMENT=element["comments"],
+                                                                            VERIFIED_NUMBER=element["number"] if "number" in element else None)]
+                            if (updated["clientUberNumber"]==1):
+                                junk = db.Insert(db="mint_loan", table="mw_customer_change_log", date=False, compulsory=False, CUSTOMER_ID=custID,
+                                                 DATA_KEY="UBER_NUMBER_VERIFICATION", DATA_VALUE=element["numberVerified"],
+                                                 COMMENTS=((element["number"] if "number" in element else "") + element["comments"]),
+                                                 CREATED_BY=input_dict["msgHeader"]["authLoginID"],
+                                                 CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                        elif element["updateType"]=="uberName":
+                            vBy = input_dict["msgHeader"]["authLoginID"]
+                            utils.logger.info("Updating uber name verification status", extra=logInfo)
+                            updated["clientUberName"] = boolmap[db.Update(db="mint_loan", table="mw_client_profile", 
+                                                                          conditions={"CUSTOMER_ID = ":custID}, NAME_VERIFIED_BY=vBy,
+                                                                          NAME_VERIFIED=element["nameVerified"], NAME_COMMENT=element["comments"],
+                                                                          VERIFIED_NAME=element["name"] if "name" in element else None)]
+                            if (updated["clientUberName"]==1):
+                                junk = db.Insert(db="mint_loan", table="mw_customer_change_log", date=False, compulsory=False, CUSTOMER_ID=custID,
+                                                 DATA_KEY="UBER_NUMBER_VERIFICATION", DATA_VALUE=element["nameVerified"],
+                                                 COMMENTS=((element["name"] if "name" in element else "") + element["comments"]),
+                                                 CREATED_BY=input_dict["msgHeader"]["authLoginID"],
+                                                 CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    token = generate(db).AuthToken() if ("clientDocument" not in [ele["updateType"] for ele in input_dict["data"]["update"]]) else {"updated":True, "token": input_dict["msgHeader"]["authToken"]}
+                    if token["updated"]:
+                        output_dict["data"]["updated"] = updated
+                        output_dict["data"].update({"error": 0, "message": success})
+                        output_dict["msgHeader"]["authToken"] = token["token"]
+                    else:
+                        output_dict["data"].update({"error":1, "message":errors["token"]})
+                resp.body = json.dumps(output_dict)
+                utils.logger.debug("Response: " + json.dumps(output_dict) + "\n", extra=logInfo)
+                db._DbClose_()
+        except Exception as ex:
+            utils.logger.error("ExecutionError: ", extra=logInfo, exc_info=True)
+            raise# falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+
+        
+
+
+
+

@@ -1,0 +1,91 @@
+import falcon, json, requests
+from mintloan_utils import DB, generate, validate, utils, datetime, timedelta
+from pypika import Query, Table, Order, JoinType
+
+class ProcessWebhookResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        
+        try:
+            raw_json = req.stream.read()
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Error', ex.message) 
+
+    def on_post(self, req, resp):
+        """Handles POST requests"""
+        output_dict = {"msgHeader":{"authToken" : ""},"data":{"docdetails":[]}}
+        errors = utils.errors
+        success = "data loaded successfully"
+        try:
+            raw_json = req.stream.read()
+	    hh = req.headers
+	    print req.url, req.headers
+            input_dict = json.loads(raw_json, encoding='utf-8')
+	    print input_dict
+	    print "-----------XXXXXXXXXXXXX-----------"
+        except Exception as ex:
+            raise #falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+        try:
+            if False:#not validate.Request(api='', request=input_dict):
+                output_dict["data"].update({"error":1, "message":errors["json"]})
+                resp.body = json.dumps(output_dict)
+            else:
+                db = DB()       
+                if False:#val_error:
+                    output_dict["data"].update({"error":1, "message":val_error})
+                    resp.body = json.dumps(output_dict)
+                else:
+        #            lm = Table("mw_client_loan_master", schema="mint_loan")
+                    conf = Table("mw_configuration", schema="mint_loan_admin")
+                    conf2 = Table("mw_configuration", schema="mint_loan")
+                    baseurl = db.runQuery(Query.from_(conf).select("CONFIG_VALUE").where(conf.CONFIG_KEY=="MIFOS_URL"))
+                    baseurl = baseurl["data"][0]["CONFIG_VALUE"]
+                    headers = utils.finflux_headers["GETCLARITY"].copy()
+		    auth = utils.mifos_auth
+		    print headers, baseurl + "loans/" + str(input_dict["loanId"])
+                    r = requests.get(baseurl + "loans/" + str(input_dict["loanId"]), headers=headers, auth=auth, verify=False)
+		    #print r
+		    if r.status_code==200:
+			resp = r.json()
+			print resp
+			extID = resp["externalId"]
+			headers["Fineract-Platform-TenantId"] = "".join(x for x in extID if not x.isdigit())
+			loanID = "".join(x for x in extID if x.isdigit())
+                        posturl = baseurl + "loans/" + loanID
+                        payload = {"locale": "en", "dateFormat": "dd MMMM yyyy"}
+                        if hh["X-FINERACT-ACTION"]=="REPAYMENT":
+                            posturl += "/transactions"
+                            cmd="repayment"
+                            payload.update(input_dict["changes"])
+                            #{"transactionDate": input_dict["changes"]["transactionDate"], "checkNumber": input_dict["changes"]["checkNumber"],
+                            #"routingCode": input_dict["changes"]["routingCode"], "receiptNumber": input_dict["changes"]["receiptNumber"],
+                            #"paymentTypeId": input_dict["changes"]["paymentTypeId"], "transactionAmount": input_dict["changes"]["transactionAmount"]})
+                        elif hh["X-FINERACT-ACTION"]=="APPROVE":
+                            cmd="approve"
+                            payload.update({"approvedOnDate": input_dict["changes"]["approvedOnDate"],
+                                            "expectedDisbursementDate" : datetime.strptime("-".join(str(x) for x in
+                                                                                                    resp["timeline"]["expectedDisbursementDate"]),
+                                                                                           "%Y-%m-%d").strftime("%d %b %Y"),
+                                            "note": ""})
+                        elif hh["X-FINERACT-ACTION"]=="DISBURSE":
+                            cmd="disburse"
+                            payload.update({"actualDisbursementDate": datetime.strptime("-".join(str(x) for x in
+                                                                                                 resp["timeline"]["actualDisbursementDate"]),
+                                                                                        "%Y-%m-%d").strftime("%d %b %Y")})
+                        elif hh["X-FINERACT-ACTION"]=="REJECT":
+                            cmd="reject"
+                            payload.update({"rejectedOnDate": input_dict["changes"]["rejectedOnDate"]})
+                        elif hh["X-FINERACT-ACTION"]=="APPROVALUNDO":
+                            cmd="undoapproval"
+                            payload={"note":""}
+                        elif hh["X-FINERACT-ACTION"]=="DISBURSALUNDO":
+                            cmd="undodisbursal"
+                            payload={"note":""}
+			print payload
+			r = requests.post(posturl + "?command=" + cmd, data=json.dumps(payload), headers=headers, auth=auth, verify=False) 
+		    	print r, posturl + "?command=" + cmd
+		    	print r.json()
+                db._DbClose_()
+        except Exception as ex:
+            raise #falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')

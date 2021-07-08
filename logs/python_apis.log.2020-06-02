@@ -1,0 +1,3 @@
+2020-06-02 16:16:16|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "nAPR6GmnWWnEQPfX1/lSReZs39RQwIH9acdTXyp5YQve!qCoIQoR0WlPLeDknfXVepHFKxUCxB1bS", "authLoginID": "admin@mintloan.com", "timestamp": 1591094776, "ipAddress": "127.0.1"}}
+2020-06-02 16:16:17|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "RK6VHXuNkirm.59pHsdz1OdGLLM27FeG8Zv4LaJ4mg0O!qCoIQoR0WlPLeDknfXVepBSroYv+jCAn"}
+

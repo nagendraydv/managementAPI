@@ -1,0 +1,60 @@
+2020-06-01 00:47:56|DEBUG|13.126.16.154|customerDetailsCalling:31|Request: {"data": {"customerID": "3"}, "msgHeader": {"authToken": "Y0cxqb..sIFhh7rt1M67Med9FTwYG.Jr5NvdKn63F48O!duPy53NGLnLfMJi4JYaORYAXa/U3yLmb", "authLoginID": "admin@mintloan.com", "timestamp": 1590952675, "ipAddress": "127.0.1"}}
+2020-06-01 00:47:58|DEBUG|13.126.16.154|customerDetailsCalling:221|Response: {"authToken": "fs8/IUSSmyCim3NIVVif/uKcRqcM0QCFg9c8dSueZFhu!duPy53NGLnLfMJi4JYaORamhysV7O5Dt"}
+
+2020-06-01 00:55:30|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "3"}, "msgHeader": {"authToken": "Y0cxqb..sIFhh7rt1M67Med9FTwYG.Jr5NvdKn63F48O!duPy53NGLnLfMJi4JYaORYAXa/U3yLmb", "authLoginID": "admin@mintloan.com", "timestamp": 1590953130, "ipAddress": "127.0.1"}}
+2020-06-01 00:55:31|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "sK2mK6ftqjlVFGdIqIuqEesBGZMGu1lgJSoiKtO0dmsO!duPy53NGLnLfMJi4JYaORT+J2SZFP0cE"}
+
+2020-06-01 00:57:58|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "3"}, "msgHeader": {"authToken": "sK2mK6ftqjlVFGdIqIuqEesBGZMGu1lgJSoiKtO0dmsO!duPy53NGLnLfMJi4JYaORT+J2SZFP0cE", "authLoginID": "admin@mintloan.com", "timestamp": 1590953277, "ipAddress": "127.0.1"}}
+2020-06-01 00:57:59|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "iMS.8si696T5p0fJKrqMoOnz7vb3FJMdR15sVee.ymLu!duPy53NGLnLfMJi4JYaORRDm3RFa39Vb"}
+
+2020-06-01 01:04:06|DEBUG|13.126.16.154|customerDetails:31|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "3"}, "msgHeader": {"authToken": "s8QYNbdCIS0zqA3C8TGiPebLWkY.QbZtqWhvgq8rUJuO!duPy53NGLnLfMJi4JYaORcO69wwc6g1c", "authLoginID": "admin@mintloan.com", "timestamp": 1590953646, "ipAddress": "127.0.1"}}
+2020-06-01 01:04:14|DEBUG|13.126.16.154|customerDetails:236|Response: {"authToken": "j1ICXYS8.yDmIKDoxja0JuAE1HxiqdpB4mufc6uS0KBu!duPy53NGLnLfMJi4JYaORdMv1U/M6keb"}
+
+2020-06-01 15:13:34|DEBUG|13.126.16.154|aadharFill:30|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "Dg6GQ2g/FTHFEl8y/FBxP.v9UL8HucZP3M6VeVEjTKZu!J+FoJNiGUtvLeDknfXVepATxSckZt6tx", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"customerID": "123", "aadharNo": "123211", "name": "nagendra", "dob": "42", "gender": "male", "house": "23", "street": "312", "careOf": "121", "landMark": "", "locality": "", "villageTownCity": "", "district": "mumbai", "subDistrict": "", "pinCode": "400072", "postOffice": "", "state": "maharastra", "country": "india"}}
+2020-06-01 15:13:34|DEBUG|13.126.16.154|aadharFill:175|Response: {"authToken": ""}
+
+2020-06-01 15:14:12|DEBUG|13.126.16.154|aadharFill:30|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "Um57t8ETtrWmMGWQmoP0B..Hz3sJIOPc2djQk.ZwQHzu!J+FoJNiGUtvLeDknfXVepIeKQplCRNtk", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"customerID": "123", "aadharNo": "123211", "name": "nagendra", "dob": "42", "gender": "male", "house": "23", "street": "312", "careOf": "121", "landMark": "", "locality": "", "villageTownCity": "", "district": "mumbai", "subDistrict": "", "pinCode": "400072", "postOffice": "", "state": "maharastra", "country": "india"}}
+2020-06-01 15:14:13|DEBUG|13.126.16.154|aadharFill:118|Updating kyc data
+
+2020-06-01 15:14:13|DEBUG|13.126.16.154|aadharFill:143|Updating dob, gender and name in finflux
+
+2020-06-01 15:14:14|DEBUG|13.126.16.154|aadharFill:175|Response: {"authToken": "YoEJGrO9tQIfLk2m3Fo1mOqRaZskW31VmFtD.OBgWY1e!J+FoJNiGUtvLeDknfXVepClpwOVBu7fJ"}
+
+2020-06-01 15:33:46|DEBUG|13.126.16.154|approveLoan:30|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "OoE84iaV1mUov4jV5HmqH.JZdQrMlB4A4VJwkKIQvBQ.!J+FoJNiGUtvLeDknfXVepIV5Raz9q5Tu", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"id": "12333", "principal": 1000, "loanID": "dharam@mintwalk.com"}}
+2020-06-01 15:33:47|INFO|13.126.16.154|approveLoan:59|api URL: https://mifos.mintwalk.com/fineract-provider/api/v1/loans/dharam@mintwalk.com?command=approve
+2020-06-01 15:33:47|INFO|13.126.16.154|approveLoan:61|api response: {"timestamp": 1591005830610, "status": 404, "error": "Not Found", "message": "Not Found"}
+2020-06-01 15:33:47|ERROR|13.126.16.154|approveLoan:83|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_approve_loan.py", line 62, in on_post
+    print(r.status_code)
+OSError: [Errno 5] Input/output error
+2020-06-01 15:34:13|DEBUG|13.126.16.154|approveLoan:30|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "OoE84iaV1mUov4jV5HmqH.JZdQrMlB4A4VJwkKIQvBQ.!J+FoJNiGUtvLeDknfXVepIV5Raz9q5Tu", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"id": 12333, "principal": 1000, "loanID": "dharam@mintwalk.com"}}
+2020-06-01 15:34:14|INFO|13.126.16.154|approveLoan:59|api URL: https://mifos.mintwalk.com/fineract-provider/api/v1/loans/dharam@mintwalk.com?command=approve
+2020-06-01 15:34:14|INFO|13.126.16.154|approveLoan:61|api response: {"timestamp": 1591005857159, "status": 404, "error": "Not Found", "message": "Not Found"}
+2020-06-01 15:34:14|ERROR|13.126.16.154|approveLoan:83|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_approve_loan.py", line 62, in on_post
+    print(r.status_code)
+OSError: [Errno 5] Input/output error
+2020-06-01 15:35:10|DEBUG|13.126.16.154|approveLoan:30|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "OoE84iaV1mUov4jV5HmqH.JZdQrMlB4A4VJwkKIQvBQ.!J+FoJNiGUtvLeDknfXVepIV5Raz9q5Tu", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"id": 12333, "principal": "1000", "loanID": "dharam@mintwalk.com"}}
+2020-06-01 15:35:10|INFO|13.126.16.154|approveLoan:59|api URL: https://mifos.mintwalk.com/fineract-provider/api/v1/loans/dharam@mintwalk.com?command=approve
+2020-06-01 15:35:10|INFO|13.126.16.154|approveLoan:61|api response: {"timestamp": 1591005913682, "status": 404, "error": "Not Found", "message": "Not Found"}
+2020-06-01 15:35:10|ERROR|13.126.16.154|approveLoan:83|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_approve_loan.py", line 62, in on_post
+    print(r.status_code)
+OSError: [Errno 5] Input/output error
+2020-06-01 15:35:25|DEBUG|13.126.16.154|approveLoan:30|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "OoE84iaV1mUov4jV5HmqH.JZdQrMlB4A4VJwkKIQvBQ.!J+FoJNiGUtvLeDknfXVepIV5Raz9q5Tu", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"id": "12333", "principal": "1000", "loanID": "dharam@mintwalk.com"}}
+2020-06-01 15:35:26|INFO|13.126.16.154|approveLoan:59|api URL: https://mifos.mintwalk.com/fineract-provider/api/v1/loans/dharam@mintwalk.com?command=approve
+2020-06-01 15:35:26|INFO|13.126.16.154|approveLoan:61|api response: {"timestamp": 1591005928991, "status": 404, "error": "Not Found", "message": "Not Found"}
+2020-06-01 15:35:26|ERROR|13.126.16.154|approveLoan:83|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_approve_loan.py", line 62, in on_post
+    print(r.status_code)
+OSError: [Errno 5] Input/output error
+2020-06-01 15:55:40|DEBUG|13.126.16.154|clientRegistration:31|Request: {"msgHeader": {"authLoginID": "prasanna@mintwalk.com", "authToken": "0v5vBA91bsIzRqqFdmq8a.SAat8F3/OaSrFZNFTerCNu!J+FoJNiGUtvLeDknfXVepNcy+YI0ypbE", "ipAddress": "1.1.1.1.1", "timestamp": 123456}, "data": {"customerID": "12131", "lender": "GETCLARITY"}}
+2020-06-01 15:55:40|INFO|13.126.16.154|clientRegistration:121|FINFLUX api POST URL: https://mifos.mintwalk.com/fineract-provider/api/v1/clients
+2020-06-01 15:55:40|INFO|13.126.16.154|clientRegistration:123|api request: {"officeId": 1, "firstname": "Babita", "lastname": "Devi", "externalId": "00000012131", "dateFormat": "dd MMMM yyyy", "locale": "en", "active": true, "activationDate": "01 September 2018", "submittedOnDate": "01 September 2018"}
+2020-06-01 15:55:41|INFO|13.126.16.154|clientRegistration:135|api response: {"developerMessage": "The request caused a data integrity issue to be fired by the database.", "httpStatusCode": "403", "defaultUserMessage": "Client with externalId `00000012131` already exists", "userMessageGlobalisationCode": "error.msg.client.duplicate.externalId", "errors": [{"developerMessage": "Client with externalId `00000012131` already exists", "defaultUserMessage": "Client with externalId `00000012131` already exists", "userMessageGlobalisationCode": "error.msg.client.duplicate.externalId", "parameterName": "externalId", "value": null, "args": [{"value": "00000012131"}]}]}
+2020-06-01 15:55:41|DEBUG|13.126.16.154|clientRegistration:387|Response: {"data": {"customerClientID": "", "error": 1, "message": "Client with externalId `00000012131` already exists"}, "msgHeader": {"authToken": ""}}
+

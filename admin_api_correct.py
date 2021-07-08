@@ -1,0 +1,375 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Fri May  8 12:19:04 2020
+
+@author: nagendra
+"""
+
+import falcon,sys
+sys.path.append("/home/nagendra/Downloads/mint_new/mint/apis")
+from falcon_multipart.middleware import MultipartMiddleware
+from ml_login import LoginResource as MlLoginResource
+from ml_login import ForceLoginResource as MlForceLoginResource
+from ml_dashboard import DashboardResource as MlDashboardResource
+from ml_aadhar_kyc_fill import AadharFillResource as MlAadharFillResource
+from ml_get_agreement_list import GetAgreementListResource as MlGetAgreementListResource
+from ml_create_repayment_info import CreateRepaymentInfoResource as MlCreateRepaymentInfoResource
+from ml_approve_loan import ApproveLoanResource as MlApproveLoanResource
+from ml_client_registration import ClientRegisterResource as MlClientRegisterResource
+from ml_repayment_data import repaymentDataResource as MlrepaymentDataResource
+from ml_create_task import CreateTaskResource as MlCreateTaskResource
+from ml_customer_details import CustDetailsResource as MlCustDetailsResource
+from ml_dashboard_backoffice import DashboardBackofficeResource as MlDashboardBackofficeResource
+from ml_dashboard_outcall_team import DashboardOutcallResource as MlDashboardOutcallResource
+from ml_dashboard_verification_team import DashboardVerificationTeamResource as MlDashboardVerificationTeamResource
+from ml_loan_application_request_v2 import LoanApplicationRequestResource as MlLoanApplicationRequestResourceV2
+from ml_get_loan_repayment_schedule import GetLoanRepaymentScheduleResource as MlGetLoanRepaymentScheduleResource
+from ml_disburse_loan import DisburseLoanResource as MlDisburseLoanResource
+from ml_get_available_cities import GetAvailableCitiesResource as MlGetAvailableCitiesResource
+from ml_get_available_products import GetAvailableProductsResource as MlGetAvailableProductsResource
+from ml_get_bank_ifsc_details import GetBankIfscDetailsResource as MlGetBankIfscDetailsResource
+from ml_get_company_city_product_details import GetCompanyCityProductDetailsResource as MlGetCompanyCityProductDetailsResource 
+from ml_get_credit_eval_info import CreditEvalInfoResource as MlCreditEvalInfoResource
+from ml_get_cust_audit_trail import GetCustAuditTrailResource as MlGetCustAuditTrailResource
+from ml_get_cust_bank_details import CustBankDetailsResource as MlCustBankDetailsResource
+from ml_get_customer_documents import GetCustDocumentsResource as MlGetCustDocumentsResource
+from ml_get_customer_extended_details import CustExtendedDetailsResource as MlCustExtendedDetailsResource
+from ml_get_customer_income import CustIncomeDetailsResource as MlCustIncomeDetailsResource
+from ml_get_customer_investments import GetCustInvestmentsResource as MlGetCustInvestmentsResource
+from ml_get_cust_stages import GetCustStagesResource as MlGetCustStagesResource
+from ml_get_document_types import GetDocumentTypesResource as MlGetDocumentTypesResource
+from ml_get_first_loan_limit import GetUpfrontLoanLimitResource as MlGetUpfrontLoanLimitResource
+from ml_get_insurance_products import GetInsuranceProductsResource as MlGetInsuranceProductsResource
+from ml_get_lender import GetLenderResource as MlGetLenderResource
+from ml_get_product_loan_details import GetProductLoanDetailsResource as MlGetProductLoanDetailsResource
+from ml_get_resolution_list import GetInteractionResolutionsResource as MlGetInteractionResolutionsResource 
+from ml_get_standard_query_list import GetStandardQueryListResource as MlGetStandardQueryListResource
+from ml_get_tyre_loan_limit import GetTyreLoanLimitResource as MlGetTyreLoanLimitResource
+from ml_get_uber_auth import GetUberAuthResource as MlGetUberAuthResource
+from ml_get_unidentified_uber_data import GetUnidentifiedUberDataResource as MlGetUnidentifiedUberDataResource
+from ml_insert_bank_ifsc_details import InsertBankIfscDetailsResource as MlInsertBankIfscDetailsResource
+from ml_show_mandate_data import ShowMandateDataResource as MlShowMandateDataResource
+from ml_show_finflux_insert_log import ShowFinfluxInsertLogResource as MlShowFinfluxInsertLogResource
+from ml_show_repay_info import ShowRepayInfoResource as MlShowRepayInfoResource
+from ml_show_task import ShowTaskResource as MlShowTaskResource
+from ml_uber_average_income_by_city import UberAvgIncByCityResource as MlUberAvgIncByCityResource
+from ml_update_loan_status import UpdateLoanStatusResource as MlUpdateLoanStatusResource
+from ml_update_repay_info import UpdateRepayInfoResource as MlUpdateRepayInfoResource
+from ml_search_user import SearchUserResource as MlSearchUserResource
+from ml_zero_folio_creation import ZeroFolioCreationResource as MlZeroFolioCreationResource
+from mw_get_customerId_count import customerIdCount as MlcustomerIdCount
+from mw_search_customer_id import SearchCustomerIdResource as MlSearchCustomerIdResource
+from ml_client_update import ClientUpdateResource as MlClientUpdateResource
+from ml_generate_cust_csv import CustReportResource as MlCustReportResource
+from ml_insert_uber_repay_info import UberPaymentsUploadResource as MlUberPaymentsUploadResource
+from ml_insert_trans_id import InsertTransIDResource as MlInsertTransIDResource
+from ml_insert_finflux_repayment import RepaymentsBulkUploadResource as MlRepaymentsBulkUploadResource
+from ml_contact_read import ContactReadResource as MlContactReadResource
+from ml_create_call_info import CreateCallInfoResource as MlCreateCallInfoResource
+from ml_generate_mandate_payment_order import MandatePaymentOrderResource as MlMandatePaymentOrderResource
+from ml_generate_payment_disbursal_report import PaymentDisbursalReportResource as MlPaymentDisbursalReportResource
+from ml_generate_refund_report import RefundReportResource as MlRefundReportResource
+from ml_generate_uber_payment_order import UberPaymentOrderResource as MlUberPaymentOrderResource
+from ml_reject_loan import RejectLoanResource as MlRejectLoanResource 
+from ml_reliace_offline_purchase import RelianceOfflinePurchaseResource as MlRelianceOfflinePurchaseResource
+from ml_stage_sync import StageSyncResource as MlStageSyncResource
+from ml_store_customer_data import StoreCustomerDataResource as MlStoreCustomerDataResource
+from ml_s3_image_dump import S3ReadResource as MlS3ReadResource
+from ml_s3_image_upload import S3UploadResource as MlS3UploadResource
+from ml_run_standard_query import RunStandardQueryResource as MlRunStandardQueryResource
+from ml_process_webhook import ProcessWebhookResource as MlProcessWebhookResource
+from ml_reliance_kyc_check import RelianceKycCheckResource as MlRelianceKycCheckResource
+from ml_split_repayments import SplitRepaymentsResource as MlSplitRepaymentsResource
+from ml_app_activity_logs import AppActivityLogsResource as MlAppActivityLogsResource
+from ml_uber_income_data_upload import UberIncomeUploadResource as MlUberIncomeUploadResource
+from ml_insert_mandate_payment_info import MandatePaymentsUploadResource as MlMandatePaymentsUploadResource
+from ml_list_loans import ListLoansResource as MlListLoansResource
+from ml_get_customer_details import CustDetailsResource as MlGetCustomerDetailsResource
+from ml_change_password import ChangePasswordResource as MlChangePasswordResource
+from ml_password_change_admin import PasswordChangeAdminResource as MlPasswordChangeAdminResource
+from ml_deactivate_account import AccountDeactivateAdminResource as MlAccountDeactivateAdminResource
+from ml_get_all_Login_ids import AllLOginIDResource as MlGetAllLoginIds
+from ml_create_new_user import CreateNewUserResource as MlCreateNewUser
+from ml_dashboard_udaan import DashboardUdaanResource as MlDashboardUdaan
+from ml_bulk_experian_upload import BulkExperianUploadResource as MlBulkExperianUpload
+from ml_grant_customer import grantCustomerResource as MlGrantCustomerResource
+from ml_bulk_lead_upload import leadBulkUploadResource as MlLeadBulkUploadResource
+from ml_dashboard_clear_tax import DashboardClearTaxResource as MlDashboardClearTaxResource
+from ml_lead_search import LeadSearchResource as MlLeadSearchResource
+from ml_bulk_experian_unprocessed_data import experianUnprocessedData as MlExperianUnprocessedData
+from ml_customer_stage_change import customerStageChangeResource as MlStageUpdateResource
+from ml_feed_upload import feedUploadResource as MlFeedUploadResource
+from ml_enkash_webhook import EnkashWebhookResource as MlEnkashWebhook
+from ml_feed_doc_list import FeedDocListResource as MlFeedDocList
+from ml_get_loan_limit import GetLoanLimitResource as MlGetLoanLimit
+from ml_grant_request_upload import grantRequestUploadResource as MlGrantRequestUploadResource
+from ml_grant_disbursement_upload import grantDisbursementUploadResource as MlGrantDisbursementUploadResource
+from ml_grant_dashboard import grantDashboardResource as MlGrantDashboardResource
+from ml_grant_proccessed_dashboard import grantDashboardResource as MlGrantProccessedDashboardResource
+from ml_whatsapp_upload import whatsappUploadResource as MlWhatsappUploadResource
+from ml_add_company_group import addCompanyGroupResource as MlAddCompanyGroupResource
+from ml_get_company_details import companyDetailsResource as MlGetCompanyDetailsResource
+from ml_add_city_mapping import cityMappingResource as MlCityMappingResource
+from ml_get_company_list_group import companyListAndGroupResource as MlCompanyListAndGroupResource
+from ml_add_company import addCompanyResource as MlAddCompanyResource
+from ml_get_list_all_cities import getCityListResource as MlGetCityListResource
+from ml_get_list_all_document import getDocListResource as MlGetDocListResource
+from ml_get_available_document import getDocAvailableResource as MlGetDocAvailableResource
+from ml_get_sms_imp_data import getSMSDataResource as MlGetSMSDataResource
+from ml_lead_creation import LeadCreationResource as MlLeadCreationResource
+from ml_update_lead import UpdateLeadResource as MlUpdateLeadResource
+from ml_dashboard_verification_team_v2 import DashboardVerificationTeamV2Resource as MlDashboardVerificationTeamV2Resource
+from ml_loan_product_template import LoanProductTemplateResource as MlLoanProductTemplateResource
+from ml_whatsapp_template_upload import whatsappTemplateUploadResource as MlwhatsappTemplateUploadResource
+from ml_udaan_income_data_upload import UdaanIncomeUploadResource as MlUdaanIncomeUploadResource
+from ml_get_loan_disburseement_file import getLoanDisbursementFileResource as MlGetLoanDisbursementFileResource
+from ml_disburse_grand_loan import GrandLoanDisburseUploadResource as MlGrandLoanDisburseUploadResource
+from ml_push_customer_details import pushCustomerDetailsResource as MlpushCustomerDetailsResource
+from ml_uplift_generate_token import upliftGenerateTokenResource as MlUpliftGenerateTokenResource
+from ml_onefamily_dashboard import onefamilyDashboardResource as MlOnefamilyDashboardResource
+from ml_search_onefamily_user import searchOnefamilyResource as MlSearchOnefamilyResource
+from ml_lead_tracker_dashboard import LeadTrackerDashboardResource as MlLeadTrackerDashboardResource
+app=falcon.API(middleware=[MultipartMiddleware()])
+mlLogin=MlLoginResource()
+mlForceLogin=MlForceLoginResource()
+mlDashboard=MlDashboardResource()
+mlAadharFill=MlAadharFillResource()
+mlGetAgreementList=MlGetAgreementListResource()
+mlCreateRepaymentInfo=MlCreateRepaymentInfoResource()
+mlApproveLoan=MlApproveLoanResource()
+mlClientRegister=MlClientRegisterResource()
+mlrepaymentData=MlrepaymentDataResource()
+mlCreateTask=MlCreateTaskResource()
+mlCustDetails=MlCustDetailsResource()
+mlDashboardBackoffice=MlDashboardBackofficeResource()
+mlDashboardOutcall=MlDashboardOutcallResource()
+mlDashboardVerificationTeam=MlDashboardVerificationTeamResource()
+mlLoanApplicationRequestV2 = MlLoanApplicationRequestResourceV2()
+mlGetLoanRepaymentSchedule = MlGetLoanRepaymentScheduleResource()
+mlDisburseLoan=MlDisburseLoanResource()
+mlGetAvailableCities=MlGetAvailableCitiesResource()
+mlGetAvailableProducts=MlGetAvailableProductsResource()
+mlGetBankIfscDetails=MlGetBankIfscDetailsResource()
+mlGetCompanyCityProductDetails=MlGetCompanyCityProductDetailsResource()
+mlCreditEvalInfo=MlCreditEvalInfoResource()
+mlGetCustAuditTrail=MlGetCustAuditTrailResource()   
+mlCustBankDetails=MlCustBankDetailsResource()
+mlGetCustDocuments=MlGetCustDocumentsResource()
+mlGetCustomerDetails = MlGetCustomerDetailsResource()
+mlCustExtendedDetails=MlCustExtendedDetailsResource()
+mlCustIncomeDetails=MlCustIncomeDetailsResource()
+mlGetCustInvestments=MlGetCustInvestmentsResource()
+mlGetCustStages=MlGetCustStagesResource()
+mlGetDocumentTypes=MlGetDocumentTypesResource()
+mlGetUpfrontLoanLimit=MlGetUpfrontLoanLimitResource()
+mlGetInsuranceProducts=MlGetInsuranceProductsResource()
+mlGetLender=MlGetLenderResource()
+mlGetProductLoanDetails=MlGetProductLoanDetailsResource()
+mlGetInteractionResolutions=MlGetInteractionResolutionsResource()
+mlGetStandardQueryList=MlGetStandardQueryListResource()
+mlGetTyreLoanLimit=MlGetTyreLoanLimitResource()
+mlGetUberAuth=MlGetUberAuthResource()
+mlGetUnidentifiedUberData=MlGetUnidentifiedUberDataResource()
+mlInsertBankIfscDetails=MlInsertBankIfscDetailsResource()
+mlShowMandateData=MlShowMandateDataResource()
+mlShowFinfluxInsertLog=MlShowFinfluxInsertLogResource()
+mlShowRepayInfo=MlShowRepayInfoResource()
+mlShowTask=MlShowTaskResource()
+mlUberAvgIncByCity=MlUberAvgIncByCityResource()
+mlUpdateLoanStatus=MlUpdateLoanStatusResource()
+mlUpdateRepayInfo=MlUpdateRepayInfoResource()
+mlSearchUser=MlSearchUserResource()
+mlZeroFolioCreation=MlZeroFolioCreationResource()
+mlcustomerIdCount=MlcustomerIdCount()
+mlSearchCustomerId=MlSearchCustomerIdResource()
+mlClientUpdate=MlClientUpdateResource()
+mlCustReport=MlCustReportResource()
+mlUberPaymentsUpload=MlUberPaymentsUploadResource()
+mlInsertTransID=MlInsertTransIDResource()
+mlRepaymentsBulkUpload=MlRepaymentsBulkUploadResource()
+mlContactRead=MlContactReadResource()
+mlCreateCallInfo=MlCreateCallInfoResource()
+mlMandatePaymentOrder=MlMandatePaymentOrderResource()
+mlPaymentDisbursalReport=MlPaymentDisbursalReportResource()
+mlRefundReport=MlRefundReportResource()
+mlUberPaymentOrder=MlUberPaymentOrderResource()
+mlRejectLoan=MlRejectLoanResource()
+mlRelianceOfflinePurchase=MlRelianceOfflinePurchaseResource()
+mlStageSync=MlStageSyncResource()
+mlStoreCustomerData=MlStoreCustomerDataResource()
+mlS3Read=MlS3ReadResource()
+mlS3Upload=MlS3UploadResource()
+mlRunStandardQuery=MlRunStandardQueryResource()
+mlProcessWebhook=MlProcessWebhookResource()
+mlRelianceKycCheck=MlRelianceKycCheckResource()
+mlSplitRepayments=MlSplitRepaymentsResource()
+mlUberIncomeUpload=MlUberIncomeUploadResource()
+mlAppActivityLogs=MlAppActivityLogsResource()
+mlMandatePaymentsUpload=MlMandatePaymentsUploadResource()
+mlListLoans = MlListLoansResource()
+mlChangePassword = MlChangePasswordResource()
+mlPasswordChangeAdmin = MlPasswordChangeAdminResource()
+mlAccountDeactivateAdmin=MlAccountDeactivateAdminResource()
+mlGetAllLoginIds=MlGetAllLoginIds()
+mlCreateNewUser = MlCreateNewUser()
+mlDashboardUdaan = MlDashboardUdaan()
+mlBulkExperianUpload = MlBulkExperianUpload()
+mlGrantCustomerResource = MlGrantCustomerResource()
+mlLeadBulkUpload= MlLeadBulkUploadResource()
+mlDashboardClearTax=MlDashboardClearTaxResource()
+mlLeadSearch=MlLeadSearchResource()
+mlExperianUnprocessedData = MlExperianUnprocessedData()
+mlStageUpdate=MlStageUpdateResource()
+mlFeedUpload=MlFeedUploadResource()
+mlEnkashWebhook=MlEnkashWebhook()
+mlFeedDocList = MlFeedDocList()
+mlGetLoanLimit = MlGetLoanLimit()
+mlGrantRequestUpload = MlGrantRequestUploadResource()
+mlGrantDisbursementUpload =MlGrantDisbursementUploadResource()
+mlGrantDashboard = MlGrantDashboardResource()
+mlGrantProccessedDashboard=MlGrantProccessedDashboardResource()
+mlWhatsappUpload=MlWhatsappUploadResource()
+mlAddCompanyGroup=MlAddCompanyGroupResource()
+mlGetCompanyDetails=MlGetCompanyDetailsResource()
+mlCityMapping=MlCityMappingResource()
+mlCompanyListGroup=MlCompanyListAndGroupResource()
+mlAddCompany=MlAddCompanyResource()
+mlGetCityList=MlGetCityListResource()
+mlGetDocList=MlGetDocListResource()
+mlGetDocAvailable=MlGetDocAvailableResource()
+mlGetSMSData=MlGetSMSDataResource()
+mlLeadCreation = MlLeadCreationResource()
+mlUpdateLead = MlUpdateLeadResource()
+mlDashboardVeriTeamV2 = MlDashboardVerificationTeamV2Resource()
+mlLoanProductTemplate = MlLoanProductTemplateResource()
+mlwhatsappTemplateUpload = MlwhatsappTemplateUploadResource()
+mlUdaanIncomeUpload = MlUdaanIncomeUploadResource()
+mlGetLoanDisbursementFile = MlGetLoanDisbursementFileResource()
+mlGrandLoanDisburseUpload = MlGrandLoanDisburseUploadResource()
+mlPushCustomerDetails = MlpushCustomerDetailsResource()
+mlUpliftGenerateToken=MlUpliftGenerateTokenResource()
+mlonefamDashboard=MlOnefamilyDashboardResource()
+mlSearchOnefamily=MlSearchOnefamilyResource()
+mlLeadTrackerDashboard=MlLeadTrackerDashboardResource()
+app.add_route('/mlLogin',mlLogin)
+app.add_route('/mlForceLogin',mlForceLogin)
+app.add_route('/mlDashboard',mlDashboard)
+app.add_route('/mlAadharFill',mlAadharFill)
+app.add_route('/mlGetAgreementList',mlGetAgreementList)
+app.add_route('/mlCreateRepaymentInfo',mlCreateRepaymentInfo)
+app.add_route('/mlApproveLoan',mlApproveLoan)
+app.add_route('/mlClientRegister',mlClientRegister)
+#app.add_route('/mlrepaymentData',mlrepaymentData)
+app.add_route('/mlCreateTask',mlCreateTask)
+app.add_route('/mlCustomerDetails',mlCustDetails)
+app.add_route('/mlDashboardBackoffice',mlDashboardBackoffice)
+app.add_route('/mlDashboardOutcall',mlDashboardOutcall)
+app.add_route('/mlDashboardForVerification',mlDashboardVerificationTeam)
+app.add_route('/mlLoanApplicationRequestV2', mlLoanApplicationRequestV2)
+app.add_route('/mlGetLoanRepaymentSchedule', mlGetLoanRepaymentSchedule)
+app.add_route('/mlDisburseLoan',mlDisburseLoan)
+app.add_route('/mlGetAvailableCities',mlGetAvailableCities)
+app.add_route('/mlGetAvailableProducts',mlGetAvailableProducts)
+app.add_route('/mlGetBankIfscDetails',mlGetBankIfscDetails)
+app.add_route('/mlGetCompanyCityProductDetails',mlGetCompanyCityProductDetails)
+app.add_route('/mlGetCreditEvalInfo',mlCreditEvalInfo)
+app.add_route('/mlGetCustAuditTrail',mlGetCustAuditTrail)
+app.add_route('/mlGetCustBankDetails',mlCustBankDetails)
+app.add_route('/mlGetCustomerDocuments',mlGetCustDocuments)
+app.add_route('/mlGetCustomerDetails', mlGetCustomerDetails)
+app.add_route('/mlGetCustomerExtendedDetails',mlCustExtendedDetails)
+app.add_route('/mlCustIncomeDetails',mlCustIncomeDetails)
+app.add_route('/mlGetCustInvestments',mlGetCustInvestments)
+app.add_route('/mlGetCustStages',mlGetCustStages)
+app.add_route('/mlGetDocumentTypes',mlGetDocumentTypes)
+app.add_route('/mlGetUpfrontLoanLimit',mlGetUpfrontLoanLimit)
+app.add_route('/mlGetInsuranceProducts',mlGetInsuranceProducts)
+app.add_route('/mlGetLender',mlGetLender)
+app.add_route('/mlGetProductLoanDetails',mlGetProductLoanDetails)
+app.add_route('/mlGetInteractionResolutions',mlGetInteractionResolutions)
+app.add_route('/mlGetStandardQueryList',mlGetStandardQueryList)
+app.add_route('/mlGetTyreLoanLimit',mlGetTyreLoanLimit)
+app.add_route('/mlGetUberAuth',mlGetUberAuth)
+app.add_route('/mlGetUnidentifiedUberData',mlGetUnidentifiedUberData)
+app.add_route('/mlInsertBankIfscDetails',mlInsertBankIfscDetails)
+app.add_route('/mlShowMandateData',mlShowMandateData)
+app.add_route('/mlShowFinfluxInsertLog',mlShowFinfluxInsertLog)
+app.add_route('/mlShowRepayInfo',mlShowRepayInfo)
+app.add_route('/mlShowTask',mlShowTask)
+app.add_route('/mlUberAvgIncByCity',mlUberAvgIncByCity)
+app.add_route('/mlUpdateLoanStatus',mlUpdateLoanStatus)
+app.add_route('/mlUpdateRepayInfo',mlUpdateRepayInfo)
+app.add_route('/mlSearchUser',mlSearchUser)
+app.add_route('/mlZeroFolioCreation',mlZeroFolioCreation)
+app.add_route('/mlcustomerIdCount',mlcustomerIdCount)
+app.add_route('/mlSearchCustomerId',mlSearchCustomerId)
+app.add_route('/mlClientUpdate',mlClientUpdate)
+app.add_route('/mlCustReport',mlCustReport)
+app.add_route('/mlUberPaymentsUpload',mlUberPaymentsUpload)
+app.add_route('/mlInsertTransID',mlInsertTransID)
+app.add_route('/mlRepaymentsBulkUpload',mlRepaymentsBulkUpload)
+app.add_route('/mlContactRead',mlContactRead)
+app.add_route('/mlCreateCallInfo',mlCreateCallInfo)
+app.add_route('/mlMandatePaymentOrder',mlMandatePaymentOrder)
+app.add_route('/mlPaymentDisbursalReport',mlPaymentDisbursalReport)
+app.add_route('/mlRefundReport',mlRefundReport)
+app.add_route('/mlUberPaymentOrder',mlUberPaymentOrder)
+app.add_route('/mlRejectLoan',mlRejectLoan)
+app.add_route('/mlRelianceOfflinePurchase',mlRelianceOfflinePurchase)
+app.add_route('/mlStageSync',mlStageSync)
+app.add_route('/mlStoreCustomerData',mlStoreCustomerData)
+app.add_route('/mlS3Read',mlS3Read)
+app.add_route('/mlS3Upload',mlS3Upload)
+app.add_route('/mlRunStandardQuery',mlRunStandardQuery)
+app.add_route('/mlProcessWebhook',mlProcessWebhook)
+app.add_route('/mlRelianceKycCheck',mlRelianceKycCheck)
+app.add_route('/mlSplitRepayments',mlSplitRepayments)
+app.add_route('/mlAppActivityLogs',mlAppActivityLogs)
+app.add_route('/mlUberIncomeUpload',mlUberIncomeUpload)
+app.add_route('/mlMandatePaymentsUpload',mlMandatePaymentsUpload)
+app.add_route('/mlListLoans', mlListLoans)
+app.add_route('/mlChangePassword', mlChangePassword)
+app.add_route('/mlPasswordChangeAdmin',mlPasswordChangeAdmin)
+app.add_route('/mlAccountDeactivateAdmin',mlAccountDeactivateAdmin)
+app.add_route('/mlGetAllLoginIds',mlGetAllLoginIds)
+app.add_route('/mlCreateNewUser',mlCreateNewUser)
+app.add_route('/mlDashboardUdaan',mlDashboardUdaan)
+app.add_route('/mlBulkExperianUpload',mlBulkExperianUpload)
+app.add_route('/mlGrantCustomerResource',mlGrantCustomerResource)
+app.add_route('/mlLeadBulkUpload',mlLeadBulkUpload)
+app.add_route('/mlDashboardClearTax',mlDashboardClearTax)
+app.add_route('/mlLeadSearch',mlLeadSearch)
+app.add_route('/mlExperianUnprocessedData',mlExperianUnprocessedData)
+app.add_route('/mlStageUpdate',mlStageUpdate)
+app.add_route('/mlFeedUpload',mlFeedUpload)
+app.add_route('/mlEnkashWebhook',mlEnkashWebhook)
+app.add_route('/mlFeedDocList',mlFeedDocList)
+app.add_route('/mlGetLoanLimit',mlGetLoanLimit)
+app.add_route('/mlGrantRequestUpload',mlGrantRequestUpload)
+app.add_route('/mlGrantDisbursementUpload',mlGrantDisbursementUpload)
+app.add_route('/mlGrantDashboard',mlGrantDashboard)
+app.add_route('/mlGrantProccessedDashboard',mlGrantProccessedDashboard)
+app.add_route('/mlWhatsappUpload',mlWhatsappUpload)
+app.add_route('/mlAddCompanyGroup',mlAddCompanyGroup)
+app.add_route('/mlGetCompanyDetails',mlGetCompanyDetails)
+app.add_route('/mlCityMapping',mlCityMapping)
+app.add_route('/mlCompanyListGroup',mlCompanyListGroup)
+app.add_route('/mlAddCompany',mlAddCompany)
+app.add_route('/mlGetCityList',mlGetCityList)
+app.add_route('/mlGetDocList',mlGetDocList)
+app.add_route('/mlGetDocAvailable',mlGetDocAvailable)
+app.add_route('/mlGetSMSData',mlGetSMSData)
+app.add_route('/mlLeadCreation',mlLeadCreation)
+app.add_route('/mlUpdateLead', mlUpdateLead)
+app.add_route('/mlDashboardVeriTeamV2', mlDashboardVeriTeamV2)
+app.add_route('/mlLoanProductTemplate', mlLoanProductTemplate)
+app.add_route('/mlwhatsappTemplateUpload', mlwhatsappTemplateUpload)
+app.add_route('/mlUdaanIncomeUpload', mlUdaanIncomeUpload)
+app.add_route('/mlGetLoanDisbursementFile', mlGetLoanDisbursementFile)
+app.add_route('/mlGrandLoanDisburseUpload', mlGrandLoanDisburseUpload)
+app.add_route('/mlPushCustomerDetails',mlPushCustomerDetails)
+app.add_route('/mlUpliftGenerateToken',mlUpliftGenerateToken)
+app.add_route('/mlonefamDashboard',mlonefamDashboard)
+app.add_route('/mlSearchOnefamily',mlSearchOnefamily)
+app.add_route('/mlLeadTrackerDashboard', mlLeadTrackerDashboard)

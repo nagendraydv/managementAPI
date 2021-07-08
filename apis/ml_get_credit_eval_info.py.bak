@@ -1,0 +1,189 @@
+import falcon, json
+from mintloan_utils import DB, generate, validate, datetime, timedelta, utils
+from pypika import Query, Table, functions, Order, JoinType
+
+class CreditEvalInfoResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        
+        try:
+            raw_json = req.stream.read()
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Error', ex.message) 
+
+    def on_post(self, req, resp):
+        """Handles POST requests"""
+        output_dict = {"msgHeader":{"authToken" : ""},"data":{"custCredentials":{}, "custDetails":{}, "loans":[], "loanLimit":"", "document":[],
+                                                              "loanLimitComments":"", "carOwnership":"", "criteriaMet":{}}}
+        errors = utils.errors
+        success = ""
+        logInfo = {'api': 'customerDetails'}
+        try:
+            raw_json = req.stream.read()
+            input_dict = json.loads(raw_json, encoding='utf-8')
+            utils.logger.debug("Request: " + json.dumps(input_dict), extra=logInfo)
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+        try:
+            if not validate.Request(api='custDetails', request=input_dict):
+                output_dict["data"].update({"error":1, "message":errors["json"]})
+                resp.body = json.dumps(output_dict)
+            else:
+                db = DB(input_dict["msgHeader"]["authLoginID"])#, filename='mysql-slave.config')
+                dbw = DB(input_dict["msgHeader"]["authLoginID"]) 
+                val_error = validate(db).basicChecks(token=input_dict["msgHeader"]["authToken"])
+                if val_error:
+                    output_dict["data"].update({"error":1, "message":val_error})
+                    resp.body = json.dumps(output_dict)
+                else:
+                    custID = input_dict["data"]["customerID"]
+                    custcred = Table("mw_customer_login_credentials", schema="mint_loan")
+                    stagemaster = Table("mw_stage_master", schema="mint_loan")
+                    profile = Table("mw_client_profile", schema="mint_loan")
+                    loanmaster = Table("mw_client_loan_master", schema="mint_loan")
+                    loandetails = Table("mw_client_loan_details", schema="mint_loan")
+                    loanlimit = Table("mw_client_loan_limit", schema="mint_loan")
+                    income = Table("mw_driver_income_data_new", schema="mint_loan")
+                    income2 = Table("mw_driver_income_data", schema="mint_loan")
+                    repay = Table("mw_loan_repayment_data", schema="mint_loan")
+                    repayhist = Table("mw_client_loan_repayment_history_master", schema="mint_loan")
+                    mandate = Table("mw_physical_mandate_status", schema="mint_loan")
+                    doc = Table("mw_cust_kyc_documents", schema="mint_loan")
+                    tran = Table("mw_client_loan_transactions", schema="mint_loan")
+                    today = datetime.now().strftime("%Y-%m-%d")
+                    stages = [{"STAGE":ele["STAGE"],"DISABLED":ele["DISABLED"]} for ele in db.runQuery(Query.from_(stagemaster).select("STAGE", "DISABLED"))["data"] if ele["STAGE"]]
+                    custCredentials = db.runQuery(Query.from_(custcred).select("LOGIN_ID", "ACCOUNT_STATUS", "LAST_LOGIN", "CUSTOMER_ID", "STAGE",
+                                                                               "REGISTERED_IP_ADDRESS", "LAST_LOGGED_IN_IP_ADDRESS", "COMMENTS",
+                                                                               "DEVICE_ID", "CREATED_DATE", "REJECTED",
+                                                                               "REJECTION_REASON").where(custcred.CUSTOMER_ID==custID))
+                    custDetails = db.runQuery(Query.from_(profile).select(profile.star).where(profile.CUSTOMER_ID==custID))
+                    loanLimit = db.runQuery(Query.from_(loanlimit).select("LOAN_LIMIT", "COMMENTS").where((loanlimit.CUSTOMER_ID==custID) & 
+                                                                                                          (loanlimit.ARCHIVED=='N')))
+                    q = Query.from_(loanmaster).join(loandetails, how=JoinType.left).on(loanmaster.ID==loandetails.LOAN_MASTER_ID)
+                    loans = db.runQuery(q.select(loanmaster.star, loandetails.star).where((loanmaster.CUSTOMER_ID==custID) &
+                                                                                              (loanmaster.STATUS=="REPAID")).orderby(loanmaster.ID, order=Order.asc))
+                    loans2 = db.runQuery(q.select(loanmaster.star, loandetails.star).where((loanmaster.CUSTOMER_ID==custID) &
+                                                                                           (loanmaster.STATUS=='ACTIVE') &
+                                                                                           (loandetails.EXPECTED_MATURITY_DATE<today)))
+                    loans["data"] += loans2["data"]
+                    for ele in loans["data"]:
+                        q = Query.from_(repayhist).select("TRANSACTION_STATUS").where(repayhist.TRANSACTION_MEDIUM=="UBER_DIRECT_DEBIT")
+                        tranStat = [X["TRANSACTION_STATUS"] for X in db.runQuery(q.where(repayhist.LOAN_ID==ele["LOAN_ACCOUNT_NO"]))["data"]]
+                        L = len(tranStat) if len(tranStat)>0 else 1
+                        trans = db.runQuery(Query.from_(tran).select(tran.star).where((tran.TYPE=='Repayment') & (tran.CUSTOMER_ID==custID) &
+                                                                                      (tran.LOAN_ACCOUNT_NO==ele["LOAN_ACCOUNT_NO"])))
+                        matDate = (datetime.strptime(ele["EXPECTED_MATURITY_DATE"], "%Y-%m-%d").date()
+                                   if (ele["EXPECTED_MATURITY_DATE"] if "EXPECTED_MATURITY_DATE" in ele else False) else datetime.now().date())
+                        s = 0
+                        for ele2 in trans["data"]:
+                            s+=ele2["AMOUNT"]
+                            ele2.update({"REPAID_IN": (datetime.strptime(ele2["TRANSACTION_DATE"], "%Y-%m-%d").date() - matDate).days})
+                        try:
+                            avgDelay = int(sum(ele2["REPAID_IN"]*ele2["AMOUNT"] for ele2 in trans["data"])/(s+0.000001))
+                        except:
+                            avgDelay = 0
+                        try:
+                            overdue = ((datetime.now().date() - matDate).days if ele["STATUS"]=="ACTIVE" else
+                                       (max([datetime.strptime(ele2["TRANSACTION_DATE"], "%Y-%m-%d")
+                                             for ele2 in trans["data"]]).date()-matDate).days if ele["STATUS"]=="REPAID" else 0)
+                        except:
+                            overdue = "NA"
+                        ele.update({"TRANSACTIONS":trans["data"], "TOTAL_REPAID":s, "OVERDUE_DAYS": overdue, "AVERAGE_DELAY":avgDelay,
+                                    "UBER_DEBIT_PART_SUCCESS":"%.2f"%(tranStat.count("PART_SUCCESS")/L),
+                                    "UBER_DEBIT_FAILURE":"%.2f"%(tranStat.count("FAILURE")/L)})
+                    mandateData = db.runQuery(Query.from_(mandate).select(mandate.star).where(mandate.CUSTOMER_ID==custID))
+                    document = db.runQuery(Query.from_(doc).select(doc.star).where((doc.CUSTOMER_ID==custID) & (doc.DOCUMENT_TYPE_ID=='113')))
+                    mw = db.runQuery(Query.from_(income).select(functions.Max(income.WEEK).as_("mw")).where(income.NO_OF_TRIPS>1))["data"][0]["mw"]
+                    lastWeekDataAvailable = (datetime.now() - datetime.strptime(mw, "%Y-%m-%d")).days in (7,8,9,10)
+                    income = db.runQuery(Query.from_(income).select(income.star).where(income.CUSTOMER_ID==custID).orderby(income.WEEK, order=Order.desc))
+                    if income["data"]:
+                        cities = {"215":"MUM", "130":"BAN", "342":"PUNE", "209":"CHENNAI", "197":"DELHI"}
+                        make = income["data"][0]["MAKE"]
+			print make
+                        model = income["data"][0]["MODEL"]
+                        licenseNo = income["data"][0]["LICENSE_NUMBER"]
+                        workingSince = "%.2f"%((datetime.now() - datetime.strptime(income["data"][0]["FIRST_TRIP_WEEK"], "%Y-%m-%d")).days/365.25)
+                        city = cities[income["data"][0]["CITY_ID"]] if income["data"][0]["CITY_ID"] in cities else "Unknown"
+                    else:
+                        make = model = workingSince = licenseNo = city = ""
+                    averageIncome=0.
+                    averageIncome2=0.
+                    averageIncome3=0.
+                    lincome = len(income["data"])
+                    if lincome==0:
+                        income = db.runQuery(Query.from_(income2).select(income2.star).where(income2.CUSTOMER_ID==custID))
+                        lincome = len(income["data"])
+                    if lincome >= 1: # calculate average income of 12 weeks of data
+                        try:
+                            iData = [(datetime.strptime(income["data"][0]["WEEK"].split(" ")[0], "%Y-%m-%d"), income["data"][0]["INCOME"])]
+                            dFormat = "%Y-%m-%d"
+                        except:
+                            try:
+                               iData = [(datetime.strptime(income["data"][0]["WEEK"].split(" ")[0], "%y-%m-%d"), income["data"][0]["INCOME"])]
+                               dFormat = "%y-%m-%d"
+                            except:
+                                iData = [(datetime.now() - timedelta(days=100), income["data"][0]["INCOME"])]
+                                dFormat = ""
+                        if (((datetime.now()-iData[0][0]).days > 14) if (not lastWeekDataAvailable) else ((datetime.now()-iData[0][0]).days >=14)) :
+                            iData = [(iData[0][0]+timedelta(days=7*i), 0) for i in range((datetime.now()-iData[0][0]).days/7-1,0,-1)] + [iData[0]]
+                        for i in range(1,lincome):
+                            if i < lincome:
+                                try:
+                                    d = datetime.strptime(income["data"][i]["WEEK"].split(" ")[0], dFormat)
+                                except:
+                                    d = iData[-1][0] - timedelta(days=7)
+                                if (iData[-1][0] - d).days > 10:
+                                    for j in range(((iData[-1][0] - d).days)/7-1,0,-1):
+                                        if d not in zip(*iData)[0]: #do not include the element if the date is already present in the list
+                                            iData.append((d+timedelta(days=7*j), 0)) # append zero for missing week(s) income 
+                                if d not in zip(*iData)[0]: #do not include the element if the date is already present in the list
+                                    iData.append((d, income["data"][i]["INCOME"]))
+			#print iData[0][1]
+                        averageIncome = int(4.25*sum(zip(*iData)[1][0:10])/(10.))
+                        averageIncome2 = int(4.25*sum(zip(*iData)[1][0:3])/3.)
+                        averageIncome3 = int(4.25*iData[0][1])
+                    if income["data"]:
+                        ok5 = ('1' if ((averageIncome>=30000) & (averageIncome2>20000) & ((income["data"][0]["DCO"]==1 if "DCO" in income["data"][0] else False) if income["data"] else False) &
+                                       (False not in {ele["AVERAGE_DELAY"]<8 for ele in loans["data"]}) &
+                                       ('Y' in {ele["VERIFICATION_STATUS"] for ele in document["data"]})) else "0")
+                        ok10 = "1" if ((ok5=="1") & (5000 in {ele["PRINCIPAL"] for ele in loans["data"]})) else "0"
+                        ok15 = "1" if ((ok10=="1") & (averageIncome>=45000) & (averageIncome2>30000) &
+                                       (10000 in {ele["PRINCIPAL"] for ele in loans["data"]})) else "0"
+                    else:
+                        ok5 = ok10 = ok15 = "0"
+                    if (custCredentials["data"]):
+                        token = generate(dbw).AuthToken()
+                        if token["updated"]:
+                            output_dict["data"]["criteriaMet"] = {"5000":ok5, "10000":ok10, "15000":ok15}
+                            output_dict["data"]["mandateData"] = utils.camelCase(mandateData["data"])
+                            output_dict["data"]["stages"] = stages
+                            output_dict["data"]["averageIncome"] = averageIncome
+                            output_dict["data"]["averageIncome2"] = averageIncome2
+                            output_dict["data"]["averageIncome3"] = averageIncome3
+                            output_dict["data"]["car"] = str(make) + " " + str(model)
+                            output_dict["data"]["workingSince"] = workingSince
+                            output_dict["data"]["licenseNo"] = licenseNo
+                            output_dict["data"]["city"] = city
+                            output_dict["data"]["carOwnership"] = (income["data"][0]["DCO"] if "DCO" in income["data"][0] else "") if income["data"] else ""
+                            output_dict["data"]["custCredentials"] = utils.camelCase(custCredentials["data"][0]) 
+                            output_dict["data"]["custDetails"] = utils.camelCase(custDetails["data"][0]) if custDetails["data"] else []
+                            output_dict["data"]["document"] = utils.camelCase(document["data"]) if document["data"] else {}
+                            if loanLimit["data"]:
+                                output_dict["data"]["loanLimit"] = loanLimit["data"][0]["LOAN_LIMIT"] if loanLimit["data"][0]["LOAN_LIMIT"] else ""
+                                output_dict["data"]["loanLimitComments"] = (loanLimit["data"][0]["COMMENTS"] if loanLimit["data"][0]["COMMENTS"]
+                                                                            else "")
+                            else:
+                                output_dict["data"]["loanLimit"], output_dict["data"]["loanLimitComments"] = ("", "")
+                            output_dict["data"]["loans"] = utils.camelCase(loans["data"]) if loans["data"] else []
+                            output_dict["data"].update({"error": 0, "message": success})
+                            output_dict["msgHeader"]["authToken"] = token["token"]
+                    else:
+                        output_dict["data"].update({"error":1, "message":errors["query"]}) 
+                resp.body = json.dumps(output_dict, encoding='unicode-escape')
+                utils.logger.debug("Response: " + json.dumps(output_dict["msgHeader"]) + "\n", extra=logInfo)
+                db._DbClose_()
+        except Exception as ex:
+            utils.logger.error("ExecutionError: ", extra=logInfo, exc_info=True)
+            raise #falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+

@@ -1,0 +1,25 @@
+2020-06-10 07:34:46|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "51"}, "msgHeader": {"authToken": "plZRXxVXWxOvStNPS/qX.uHT6z53QaOZVY6i8bbgHB6.!Abo81XesAYHLeDknfXVepAHWC0sHJpMN", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591754686, "ipAddress": "127.0.1"}}
+2020-06-10 07:34:47|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "AsWj.7LrZRRowT.HKuMrSuYhS8xFZz2hf1zNSQWQ3NVO!Abo81XesAYHLeDknfXVepMdcW+ko1ZwL"}
+
+2020-06-10 09:31:11|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "47", "update": [{"updateType": "uberApi", "verificationStatus": "", "docSeqID": "", "accountNo": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "docComments": "", "stage": ""}]}, "msgHeader": {"authToken": "JMJrpUJDbf7lty10vHpVwe.KuW7aPojm2hfn6tYiYL6e!Abo81XesAYHLeDknfXVepL6DlnIrBPDu", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591761671, "ipAddress": "127.0.1"}}
+2020-06-10 09:31:11|INFO|13.126.16.154|investorUpdate:268|Enabling uber api request for the customer
+2020-06-10 09:31:12|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "t8OvupZgmG1xAGtN/tQwHe424RFSU8cIFkhlg50bhFxO!Abo81XesAYHLeDknfXVepBe/oVCBknC+"}, "data": {"updated": {"clientDocument": [], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": 1}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-10 09:32:48|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "47"}, "msgHeader": {"authToken": "2PssRcdjr8cbivmi5EFLc.A/RJuBJLx0ndvdrfnCasUu!Abo81XesAYHLeDknfXVepP/Db44PBZw4", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591761769, "ipAddress": "127.0.1"}}
+2020-06-10 09:32:50|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "uBwiDUsbAMaNx8qwt/Q5NuqJkBmA7l41B2od8WKWAIX.!Abo81XesAYHLeDknfXVepNk+shObBkNo"}
+
+2020-06-10 09:33:46|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "47"}, "msgHeader": {"authToken": "uBwiDUsbAMaNx8qwt/Q5NuqJkBmA7l41B2od8WKWAIX.!Abo81XesAYHLeDknfXVepNk+shObBkNo", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591761826, "ipAddress": "127.0.1"}}
+2020-06-10 09:33:47|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "71jb5wKex2P6ATA4r5MSPOv1RnwvNdROIJ0anVSbhjmu!Abo81XesAYHLeDknfXVepLT0xBeqRTy9"}
+
+2020-06-10 09:33:50|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "47"}, "msgHeader": {"authToken": "71jb5wKex2P6ATA4r5MSPOv1RnwvNdROIJ0anVSbhjmu!Abo81XesAYHLeDknfXVepLT0xBeqRTy9", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591761831, "ipAddress": "127.0.1"}}
+2020-06-10 09:33:51|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "jR0C3XZ.y/PXZ8hM6X.ao.mWmlxQgki6dgtZldPGhntO!Abo81XesAYHLeDknfXVepBCUrtu00lkn"}
+
+2020-06-10 09:35:33|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "47"}, "msgHeader": {"authToken": "jR0C3XZ.y/PXZ8hM6X.ao.mWmlxQgki6dgtZldPGhntO!Abo81XesAYHLeDknfXVepBCUrtu00lkn", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591761933, "ipAddress": "127.0.1"}}
+2020-06-10 09:35:42|DEBUG|13.126.16.154|customerDetails:375|Response: {"authToken": "HZnT0wFexxAN1K.6IGErzOkYNaCA1WHgCoXidJc2OrMe!Abo81XesAYHLeDknfXVepGZx+EccD4tO"}
+
+2020-06-10 09:40:22|DEBUG|13.126.16.154|customerIncome:30|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "47"}, "msgHeader": {"authToken": "HZnT0wFexxAN1K.6IGErzOkYNaCA1WHgCoXidJc2OrMe!Abo81XesAYHLeDknfXVepGZx+EccD4tO", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591762223, "ipAddress": "127.0.1"}}
+2020-06-10 09:40:27|DEBUG|13.126.16.154|customerIncome:166|Response: {"authToken": "p6VR.6N5wkB/eIZaVyqjgO1.iLitDxMOprMC63kwLKNu!Abo81XesAYHLeDknfXVepJBL2Qir8D8x"}
+
+2020-06-10 17:36:24|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "wQEnqGr3uYnOZEjUrzewNuFOubThlHoBKHVAH3WOlitu!Abo81XesAYHLeDknfXVepFRogWhF8FGq", "authLoginID": "prasanna@mintwalk.com", "timestamp": 1591790784, "ipAddress": "127.0.1"}}
+2020-06-10 17:36:25|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "Z3CN2D2OaXSSaJeKnZDHB.Dps4C1roch7xswFADmfo0u!Abo81XesAYHLeDknfXVepMKlp2YUs51U"}
+

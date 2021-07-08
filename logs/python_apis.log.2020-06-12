@@ -1,0 +1,188 @@
+2020-06-12 14:47:19|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "123"}, "msgHeader": {"authToken": "ue3WgV4JmrNGdge8hN09IegRatPKN5hGIT7M/yZcpkZ.!FdnL9S0nqd/LeDknfXVepOzdqai6eQq9", "authLoginID": "admin@mintloan.com", "timestamp": 1591953440, "ipAddress": "127.0.1"}}
+2020-06-12 14:47:20|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "ImJKtSS5gEvyCToZ6/sameuHejS6Q3fJvl.vPxyqAJ7O!FdnL9S0nqd/LeDknfXVepEdSLuSX2v4U"}
+
+2020-06-12 15:15:22|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "62"}, "msgHeader": {"authToken": "rPUAM2R9Yx3zAYdDEKDV6uq7CD/JZNGEm9GIXRe0k1ce!FdnL9S0nqd/LeDknfXVepEs3IMZKTQum", "authLoginID": "admin@mintloan.com", "timestamp": 1591955122, "ipAddress": "127.0.1"}}
+2020-06-12 15:15:23|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "a6vGfgH11LJY26Lgwhl49.gxLlhW.zuI9scYei0TUive!FdnL9S0nqd/LeDknfXVepK1T9bER5E4d"}
+
+2020-06-12 15:21:12|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "62", "update": [{"updateType": "city", "comments": "", "city": "Delhi"}]}, "msgHeader": {"authToken": "5mPm0mWUWwHMVzGKof1YTOc4tFWlOkv40C4/FGxYAoWu!FdnL9S0nqd/LeDknfXVepDwtWTJmXMrl", "authLoginID": "admin@mintloan.com", "timestamp": 1591955472, "ipAddress": "127.0.1"}}
+2020-06-12 15:21:12|INFO|13.126.16.154|investorUpdate:319|Updating uber number verification status
+2020-06-12 15:21:13|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "k1T7.VSwkkGW7dXOPXt7g.8w8G3/crMMOVUWs.aT4egu!FdnL9S0nqd/LeDknfXVepPepyh0GlVC5"}, "data": {"updated": {"clientDocument": [], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": "", "clientCity": 1}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-12 15:22:07|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "62", "update": [{"updateType": "city", "comments": "", "city": "Chennai"}]}, "msgHeader": {"authToken": "k1T7.VSwkkGW7dXOPXt7g.8w8G3/crMMOVUWs.aT4egu!FdnL9S0nqd/LeDknfXVepPepyh0GlVC5", "authLoginID": "admin@mintloan.com", "timestamp": 1591955528, "ipAddress": "127.0.1"}}
+2020-06-12 15:22:08|INFO|13.126.16.154|investorUpdate:319|Updating uber number verification status
+2020-06-12 15:22:08|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "MDlvrtID17ni4O3zJBbqIOVBqGMYeKdlmjJsdLfKZ/EO!FdnL9S0nqd/LeDknfXVepGlWDYaN25R0"}, "data": {"updated": {"clientDocument": [], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": "", "clientCity": 1}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-12 15:23:25|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "62", "update": [{"updateType": "city", "comments": "", "city": "Hyderabad"}]}, "msgHeader": {"authToken": "MDlvrtID17ni4O3zJBbqIOVBqGMYeKdlmjJsdLfKZ/EO!FdnL9S0nqd/LeDknfXVepGlWDYaN25R0", "authLoginID": "admin@mintloan.com", "timestamp": 1591955606, "ipAddress": "127.0.1"}}
+2020-06-12 15:23:26|INFO|13.126.16.154|investorUpdate:319|Updating uber number verification status
+2020-06-12 15:23:26|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "bzJt527sOCWIjECkASDZAuryq.DSKcFovTZIOD3J8Fje!FdnL9S0nqd/LeDknfXVepOqWlwWRVJdi"}, "data": {"updated": {"clientDocument": [], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": "", "clientCity": 1}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-12 15:25:53|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "62"}, "msgHeader": {"authToken": "xIwiZiYZBrWGzcZE8kPJy.xCvQJpzCuaSaccbJUPeQ5.!FdnL9S0nqd/LeDknfXVepBDdRe5RAuOy", "authLoginID": "admin@mintloan.com", "timestamp": 1591955753, "ipAddress": "127.0.1"}}
+2020-06-12 15:25:54|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "TPeiEj7TgNi4I3hl00p6jOWG2kNNG3773Y/8pF9VuoAu!FdnL9S0nqd/LeDknfXVepMcN1zVGagDB"}
+
+2020-06-12 15:27:35|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "62", "update": [{"updateType": "custReject", "verificationStatus": "", "docSeqID": "", "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "rejectedReason": "unknown", "undoReject": 0}]}, "msgHeader": {"authToken": "E6bS.0wJru506CdQVA1D6enzu35ORRLZITsC/356Pxzu!FdnL9S0nqd/LeDknfXVepHq89RN6/dXd", "authLoginID": "admin@mintloan.com", "timestamp": 1591955856, "ipAddress": "127.0.1"}}
+2020-06-12 15:27:36|INFO|13.126.16.154|investorUpdate:127|Rejecting a customer
+2020-06-12 15:27:36|ERROR|13.126.16.154|investorUpdate:461|ExecutionError: 
+Traceback (most recent call last):
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 941, in check_header_validity
+    if not pat.match(value):
+TypeError: expected string or bytes-like object
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/centos/mint/apis/ml_client_update.py", line 145, in on_post
+    auth=utils.finflux_auth, headers=utils.finflux_headers, verify=False)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 116, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 60, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 519, in request
+    prep = self.prepare_request(req)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 462, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 314, in prepare
+    self.prepare_headers(headers)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 448, in prepare_headers
+    check_header_validity(header)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 945, in check_header_validity
+    "bytes, not %s" % (name, value, type(value)))
+requests.exceptions.InvalidHeader: Value for header {CHAITANYA: {'Content-type': 'application/json', 'Fineract-Platform-TenantId': 'chaitanya'}} must be of type str or bytes, not <class 'dict'>
+2020-06-12 15:40:47|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "62", "update": [{"updateType": "custReject", "verificationStatus": "", "docSeqID": "", "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "rejectedReason": "unknown", "undoReject": 0}]}, "msgHeader": {"authToken": "/mKy1Dv1zAAMFCQDcg3Gyepz9xKCsYfRrA4H2S0k1xzO!FdnL9S0nqd/LeDknfXVepETOazA8GD4m", "authLoginID": "admin@mintloan.com", "timestamp": 1591956647, "ipAddress": "127.0.1"}}
+2020-06-12 15:40:47|INFO|13.126.16.154|investorUpdate:121|Rejecting a customer
+2020-06-12 15:40:47|ERROR|13.126.16.154|investorUpdate:449|ExecutionError: 
+Traceback (most recent call last):
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 941, in check_header_validity
+    if not pat.match(value):
+TypeError: expected string or bytes-like object
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/centos/mint/apis/ml_client_update.py", line 134, in on_post
+    auth=utils.finflux_auth, headers=utils.finflux_headers, verify=False)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 116, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 60, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 519, in request
+    prep = self.prepare_request(req)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 462, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 314, in prepare
+    self.prepare_headers(headers)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 448, in prepare_headers
+    check_header_validity(header)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 945, in check_header_validity
+    "bytes, not %s" % (name, value, type(value)))
+requests.exceptions.InvalidHeader: Value for header {CHAITANYA: {'Content-type': 'application/json', 'Fineract-Platform-TenantId': 'chaitanya'}} must be of type str or bytes, not <class 'dict'>
+2020-06-12 15:41:33|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "47", "update": [{"updateType": "custReject", "verificationStatus": "", "docSeqID": "", "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "rejectedReason": "fraud", "undoReject": 0}]}, "msgHeader": {"authToken": "7vzCctlFK/vWbsjiLJgQmeVIxfNdPr1RapWHA6dw3oEe!FdnL9S0nqd/LeDknfXVepCuQG8RgMlPc", "authLoginID": "admin@mintloan.com", "timestamp": 1591956693, "ipAddress": "127.0.1"}}
+2020-06-12 15:41:33|INFO|13.126.16.154|investorUpdate:121|Rejecting a customer
+2020-06-12 15:41:33|ERROR|13.126.16.154|investorUpdate:449|ExecutionError: 
+Traceback (most recent call last):
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 941, in check_header_validity
+    if not pat.match(value):
+TypeError: expected string or bytes-like object
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/centos/mint/apis/ml_client_update.py", line 134, in on_post
+    auth=utils.finflux_auth, headers=utils.finflux_headers, verify=False)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 116, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 60, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 519, in request
+    prep = self.prepare_request(req)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 462, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 314, in prepare
+    self.prepare_headers(headers)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 448, in prepare_headers
+    check_header_validity(header)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 945, in check_header_validity
+    "bytes, not %s" % (name, value, type(value)))
+requests.exceptions.InvalidHeader: Value for header {CHAITANYA: {'Content-type': 'application/json', 'Fineract-Platform-TenantId': 'chaitanya'}} must be of type str or bytes, not <class 'dict'>
+2020-06-12 16:14:37|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "62"}, "msgHeader": {"authToken": "v2Bh405VVC2JJolsXI5XY.qG.6IYB0/ae5Njgc002Qw.!FdnL9S0nqd/LeDknfXVepJHpHfsAhzyz", "authLoginID": "admin@mintloan.com", "timestamp": 1591958678, "ipAddress": "127.0.1"}}
+2020-06-12 16:14:38|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "QzpG8Z4ZE0LJCwDfDOgJKegITo0yLGn3dcTOQaiDp3Gu!FdnL9S0nqd/LeDknfXVepBit8c1mA82P"}
+
+2020-06-12 16:15:41|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "62", "update": [{"updateType": "custReject", "verificationStatus": "", "docSeqID": "", "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "rejectedReason": "not ", "undoReject": 0}]}, "msgHeader": {"authToken": "mLdSdMRnSVeCmdSyqgjwre/qhfk4jtuUTu2fX0QaDkhO!FdnL9S0nqd/LeDknfXVepCIPh9IyOhKV", "authLoginID": "admin@mintloan.com", "timestamp": 1591958741, "ipAddress": "127.0.1"}}
+2020-06-12 16:15:42|INFO|13.126.16.154|investorUpdate:121|Rejecting a customer
+2020-06-12 16:15:42|ERROR|13.126.16.154|investorUpdate:449|ExecutionError: 
+Traceback (most recent call last):
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 941, in check_header_validity
+    if not pat.match(value):
+TypeError: expected string or bytes-like object
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/centos/mint/apis/ml_client_update.py", line 134, in on_post
+    auth=utils.finflux_auth, headers=utils.finflux_headers, verify=False)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 116, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/api.py", line 60, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 519, in request
+    prep = self.prepare_request(req)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/sessions.py", line 462, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 314, in prepare
+    self.prepare_headers(headers)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/models.py", line 448, in prepare_headers
+    check_header_validity(header)
+  File "/root/anaconda3/lib/python3.7/site-packages/requests/utils.py", line 945, in check_header_validity
+    "bytes, not %s" % (name, value, type(value)))
+requests.exceptions.InvalidHeader: Value for header {CHAITANYA: {'Content-type': 'application/json', 'Fineract-Platform-TenantId': 'chaitanya'}} must be of type str or bytes, not <class 'dict'>
+2020-06-12 16:45:34|DEBUG|13.126.16.154|investorUpdate:31|Request: {"data": {"customerID": "23", "update": [{"updateType": "custReject", "verificationStatus": "", "docSeqID": "", "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "rejectedReason": "payment pending", "undoReject": 0}]}, "msgHeader": {"authToken": "ZWbz76eSVNyM0aQW3pqbjuX6thV8mYEM6Qg.NJVHm.Ge!FdnL9S0nqd/LeDknfXVepAToVPr9vs5W", "authLoginID": "admin@mintloan.com", "timestamp": 1591960534, "ipAddress": "127.0.1"}}
+2020-06-12 16:45:35|INFO|13.126.16.154|investorUpdate:108|Rejecting a customer
+2020-06-12 16:45:35|DEBUG|13.126.16.154|investorUpdate:425|Response: {"msgHeader": {"authToken": "bUR8qFivm0lDOVc8P0zm0ulpgdxteAeHRm1dcyUFt2xO!FdnL9S0nqd/LeDknfXVepLOUJfg5BrXJ"}, "data": {"updated": {"clientDocument": [], "customerCredentials": 1, "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": ""}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-12 16:48:34|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "2YV1IDUOcJex9laLCjh28.1MffboKm4L6qY4tYoiEPle!FdnL9S0nqd/LeDknfXVepBHJLbHlDSUq", "authLoginID": "admin@mintloan.com", "timestamp": 1591960715, "ipAddress": "127.0.1"}}
+2020-06-12 16:48:35|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "PSMJ8Hg7FJvTlejqNCxwSuKB8FzlNXTblzLN2Tgx8qIO!FdnL9S0nqd/LeDknfXVepGb7UGpKzMFb"}
+
+2020-06-12 16:52:32|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "CFtYU4251lTlbzncKa/rJ.fSMiGNWUUlgxPCNT5Dnwe.!FdnL9S0nqd/LeDknfXVepF76gfHkSnOR", "authLoginID": "admin@mintloan.com", "timestamp": 1591960953, "ipAddress": "127.0.1"}}
+2020-06-12 16:52:33|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "c3R61zMN16DjbP0TzbXGZuPifpJJuULADWGm51DxMQsO!FdnL9S0nqd/LeDknfXVepAxcSCQNIOEW"}
+
+2020-06-12 16:53:55|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "KvYIbQ2yR4.9dn9vTQRgAODmYWNK9Zwnoni73.84C/vu!FdnL9S0nqd/LeDknfXVepH/bkpp522mw", "authLoginID": "admin@mintloan.com", "timestamp": 1591961036, "ipAddress": "127.0.1"}}
+2020-06-12 16:53:56|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "mKTbK9YmJeBIsh1GSh1rmeikxVwxlkLGSfkV8zmNrV6O!FdnL9S0nqd/LeDknfXVepNV7wntN9ZXk"}
+
+2020-06-12 16:54:09|DEBUG|13.126.16.154|investorUpdate:31|Request: {"data": {"customerID": "23", "update": [{"updateType": "clientDocument", "verificationStatus": "Y", "docSeqID": 856016, "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "", "docTypeID": "102"}]}, "msgHeader": {"authToken": "mKTbK9YmJeBIsh1GSh1rmeikxVwxlkLGSfkV8zmNrV6O!FdnL9S0nqd/LeDknfXVepNV7wntN9ZXk", "authLoginID": "admin@mintloan.com", "timestamp": 1591961050, "ipAddress": "127.0.1"}}
+2020-06-12 16:54:10|INFO|13.126.16.154|investorUpdate:75|Updating document verification status
+2020-06-12 16:54:10|DEBUG|13.126.16.154|investorUpdate:425|Response: {"msgHeader": {"authToken": "mKTbK9YmJeBIsh1GSh1rmeikxVwxlkLGSfkV8zmNrV6O!FdnL9S0nqd/LeDknfXVepNV7wntN9ZXk"}, "data": {"updated": {"clientDocument": [{"docSeqID": 856016, "success": 1, "successBank": 0}], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": ""}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-12 16:54:10|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "mKTbK9YmJeBIsh1GSh1rmeikxVwxlkLGSfkV8zmNrV6O!FdnL9S0nqd/LeDknfXVepNV7wntN9ZXk", "authLoginID": "admin@mintloan.com", "timestamp": 1591961051, "ipAddress": "127.0.1"}}
+2020-06-12 16:54:11|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "ydxiefp8i4VMgyvPs3t1JeWxc975wkPOtco/bV5eK4/.!FdnL9S0nqd/LeDknfXVepO5A/EkDlva7"}
+
+2020-06-12 17:37:27|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "123"}, "msgHeader": {"authToken": "5AA7ui3lRzIGouQUbBoVq.hk9qZ9AfxLDI31gA3SV/M.!FdnL9S0nqd/LeDknfXVepMKlp2YUs51U", "authLoginID": "admin@mintloan.com", "timestamp": 1591963647, "ipAddress": "127.0.1"}}
+2020-06-12 17:37:28|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "gskrAuwTnvWFbz7LnBxEreWQxpzQkeNH/gsDy3uQ6AAu!FdnL9S0nqd/LeDknfXVepO7Eo0+hal3F"}
+
+2020-06-12 17:37:46|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "123"}, "msgHeader": {"authToken": "gskrAuwTnvWFbz7LnBxEreWQxpzQkeNH/gsDy3uQ6AAu!FdnL9S0nqd/LeDknfXVepO7Eo0+hal3F", "authLoginID": "admin@mintloan.com", "timestamp": 1591963666, "ipAddress": "127.0.1"}}
+2020-06-12 17:37:47|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "GRxgKut8Z1XQPXBWX6PZRursb6slPpxaMpMB.QE0Kfz.!FdnL9S0nqd/LeDknfXVepLEiw4MBRQ6o"}
+
+2020-06-12 17:55:23|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "366751"}, "msgHeader": {"authToken": "6zaAmMriVR5nPEDHhV5GOOwyYywAiWNfZ/LvGKTlCUYO!FdnL9S0nqd/LeDknfXVepMREA5r7NQPe", "authLoginID": "admin@mintloan.com", "timestamp": 1591964724, "ipAddress": "127.0.1"}}
+2020-06-12 17:55:24|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "STQ20vfT0ShhPZR3UXyUMevFPKKzuv3MfDJyQZEL5fze!FdnL9S0nqd/LeDknfXVepPx30irEox0a"}
+
+2020-06-12 17:55:36|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "366751"}, "msgHeader": {"authToken": "STQ20vfT0ShhPZR3UXyUMevFPKKzuv3MfDJyQZEL5fze!FdnL9S0nqd/LeDknfXVepPx30irEox0a", "authLoginID": "admin@mintloan.com", "timestamp": 1591964737, "ipAddress": "127.0.1"}}
+2020-06-12 17:55:37|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "Lf4VIqLuh/WH3gTP.v7FAuAxY9W5gQAMyC2n0O9ZTUWO!FdnL9S0nqd/LeDknfXVepBSN+qOE4Hvo"}
+
+2020-06-12 17:56:27|DEBUG|13.126.16.154|customerIncome:30|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "366751"}, "msgHeader": {"authToken": "7ue80VMRk7yd0sZR8/ddTOCGlxM.7kByMrB6aTWX4The!FdnL9S0nqd/LeDknfXVepF9zi2wsw3nM", "authLoginID": "admin@mintloan.com", "timestamp": 1591964787, "ipAddress": "127.0.1"}}
+2020-06-12 17:56:31|DEBUG|13.126.16.154|customerIncome:166|Response: {"authToken": "9ts7rOwpqNB3FJaHidW51ulMTU/CbOBTLUuLOjqR6R/e!FdnL9S0nqd/LeDknfXVepCwOuSKUhMFa"}
+
+2020-06-12 17:56:33|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "366751"}, "msgHeader": {"authToken": "9ts7rOwpqNB3FJaHidW51ulMTU/CbOBTLUuLOjqR6R/e!FdnL9S0nqd/LeDknfXVepCwOuSKUhMFa", "authLoginID": "admin@mintloan.com", "timestamp": 1591964794, "ipAddress": "127.0.1"}}
+2020-06-12 17:56:35|DEBUG|13.126.16.154|customerDetails:375|Response: {"authToken": "2OW0NlPy2.ZFP5tJ/6oiUeqi840KyZHwNsdEPOZdyv3O!FdnL9S0nqd/LeDknfXVepD2nrE4yhasl"}
+
+2020-06-12 18:09:14|DEBUG|13.126.16.154|aadharFill:30|Request: {"data": {"customerID": "366751", "aadharNo": "564455454545", "name": "naveen", "mothersName": "naveen", "fathersName": "naveen", "dob": "", "gender": "male", "house": "402", "street": "sakinaka", "careOf": "", "landMark": "", "locality": "", "villageTownCity": "MUMBAI", "district": "andheri", "subDistrict": "", "pinCode": "400074", "postOffice": "", "state": "MAHARASHTRA", "country": "INDIA", "houseCorr": "402", "streetCorr": "sakinaka", "careOfCorr": "", "landMarkCorr": "", "localityCorr": "", "villageTownCityCorr": "MUMBAI", "districtCorr": "andheri", "subDistrictCorr": "", "pinCodeCorr": "400074", "postOfficeCorr": "", "stateCorr": "MAHARASHTRA", "countryCorr": "INDIA"}, "msgHeader": {"authToken": "tXuRs83RGTqZTVQzGGa9HOM4yc5wSjUi8uu7I7xE3tY.!FdnL9S0nqd/LeDknfXVepDbi7TYPsc3q", "authLoginID": "admin@mintloan.com", "timestamp": 1591965555, "ipAddress": "127.0.1"}}
+2020-06-12 18:09:15|DEBUG|13.126.16.154|aadharFill:118|Updating kyc data
+
+2020-06-12 18:09:15|DEBUG|13.126.16.154|aadharFill:143|Updating dob, gender and name in finflux
+
+2020-06-12 18:09:15|DEBUG|13.126.16.154|aadharFill:175|Response: {"authToken": "Nn4Tqy090.vwzKlk4buWo./6SczXvlwx8t5W6taFA21u!FdnL9S0nqd/LeDknfXVepGpUyzeIY/dF"}
+
+2020-06-12 18:13:54|DEBUG|13.126.16.154|customerIncome:30|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "47"}, "msgHeader": {"authToken": "i.jKFyBmHYK5W2pzIReg9epENz3JIW32fn4IuQRQt1ce!FdnL9S0nqd/LeDknfXVepLBEiK0Eia17", "authLoginID": "admin@mintloan.com", "timestamp": 1591965834, "ipAddress": "127.0.1"}}
+2020-06-12 18:13:56|DEBUG|13.126.16.154|customerIncome:166|Response: {"authToken": "5RoyVRMiXqpuWikVdpGM7uzixRJoMLGYmoWTuLdsTfBe!FdnL9S0nqd/LeDknfXVepDtrqtSwEznD"}
+
+2020-06-12 18:14:45|DEBUG|13.126.16.154|loansDataUpload:39|Request: {"data": {"docType": "file", "subType": null}, "msgHeader": {"authToken": "5RoyVRMiXqpuWikVdpGM7uzixRJoMLGYmoWTuLdsTfBe!FdnL9S0nqd/LeDknfXVepDtrqtSwEznD", "authLoginID": "admin@mintloan.com", "timestamp": "1591965886", "ipAddress": "127.0.1"}, "loansData": "rbl bank.xlsx"}
+2020-06-12 18:15:19|DEBUG|13.126.16.154|loansDataUpload:39|Request: {"data": {"docType": "file", "subType": null}, "msgHeader": {"authToken": "5RoyVRMiXqpuWikVdpGM7uzixRJoMLGYmoWTuLdsTfBe!FdnL9S0nqd/LeDknfXVepDtrqtSwEznD", "authLoginID": "admin@mintloan.com", "timestamp": "1591965919", "ipAddress": "127.0.1"}, "loansData": "rbl bank.xlsx"}
+2020-06-12 18:15:21|ERROR|13.126.16.154|loansDataUpload:132|Response: {"msgHeader": {"authToken": ""}, "data": {"error": 1, "message": "duplicate file - not uploaded"}}
+

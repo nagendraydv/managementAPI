@@ -1,0 +1,21 @@
+2020-06-15 12:20:31|DEBUG|13.126.16.154|bulkCustomerCreate:40|Request: {"data": {"docType": "bulkCustomerCreate", "subType": null}, "msgHeader": {"authToken": "mYcEL6i/mh/x2oKZmhMiOequsKnR2ry7L0GLWOBg3sR.!1kZ3UtDCHp3LeDknfXVepEl73LHmjMLR", "authLoginID": "sandesh.kulkarni@mintwalk.com", "timestamp": "1592203831", "ipAddress": "127.0.1"}, "customerData": "upload Alternate Beneficiary list for adidas 2nd Batch non uber 12June20.xlsx"}
+2020-06-15 12:48:34|DEBUG|13.126.16.154|bulkCustomerCreate:40|Request: {"data": {"docType": "bulkCustomerCreate", "subType": null}, "msgHeader": {"authToken": "mYcEL6i/mh/x2oKZmhMiOequsKnR2ry7L0GLWOBg3sR.!1kZ3UtDCHp3LeDknfXVepEl73LHmjMLR", "authLoginID": "sandesh.kulkarni@mintwalk.com", "timestamp": "1592205514", "ipAddress": "127.0.1"}, "customerData": "upload Alternate Beneficiary list for adidas 2nd Batch non uber 12June20.xlsx"}
+2020-06-15 12:48:36|ERROR|13.126.16.154|bulkCustomerCreate:168|Response: {"msgHeader": {"authToken": ""}, "data": {"error": 1, "message": "duplicate file - not uploaded"}}
+
+2020-06-15 12:49:02|DEBUG|13.126.16.154|bulkCustomerCreate:40|Request: {"data": {"docType": "bulkCustomerCreate", "subType": null}, "msgHeader": {"authToken": "mYcEL6i/mh/x2oKZmhMiOequsKnR2ry7L0GLWOBg3sR.!1kZ3UtDCHp3LeDknfXVepEl73LHmjMLR", "authLoginID": "sandesh.kulkarni@mintwalk.com", "timestamp": "1592205543", "ipAddress": "127.0.1"}, "customerData": "Upload Mahindra Non Uber 08June20_1.xlsx"}
+2020-06-15 12:49:05|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:06|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:07|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:07|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:08|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:09|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:10|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:10|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:11|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:12|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:12|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:13|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:14|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:14|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 12:49:15|DEBUG|13.126.16.154|bulkCustomerCreate:152|Request sent to java backend
+2020-06-15 15:57:50|DEBUG|13.126.16.154|bulkCustomerCreate:40|Request: {"data": {"docType": "bulkCustomerCreate", "subType": null}, "msgHeader": {"authToken": "W0Y8Sy9PD0GRbohKfygJE.IoHzi.X8p6qzgVb5h1DLie!1kZ3UtDCHp3LeDknfXVepIMFAhwej5OC", "authLoginID": "sandesh.kulkarni@mintwalk.com", "timestamp": "1592216870", "ipAddress": "127.0.1"}, "customerData": "Upload non uber adidas  11May20 alt ben 15June20.xlsx"}

@@ -1,0 +1,96 @@
+import falcon, json, requests
+from mintloan_utils import DB, generate, validate, utils, datetime, timedelta
+from pypika import Query, Table, Order, JoinType
+
+class ShowTaskResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        
+        try:
+            raw_json = req.stream.read()
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Error', ex.message) 
+
+    def on_post(self, req, resp):
+        """Handles POST requests"""
+        output_dict = {"msgHeader":{"authToken" : ""},"data":{"tasks":[], "loans":[], "logins":[], "custData":{}}}
+        errors = utils.errors
+        success = "tasks loaded successfully"
+        try:
+            raw_json = req.stream.read()
+            input_dict = json.loads(raw_json, encoding='utf-8')
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+        try:
+            if not validate.Request(api='showTask', request=input_dict):
+                output_dict["data"].update({"error":1, "message":errors["json"]})
+                resp.body = json.dumps(output_dict)
+            else:
+                db = DB(input_dict["msgHeader"]["authLoginID"])       
+                val_error = validate(db).basicChecks(token=input_dict["msgHeader"]["authToken"])
+                if val_error:
+                    output_dict["data"].update({"error":1, "message":val_error})
+                    resp.body = json.dumps(output_dict)
+                else:
+		    Data = {}
+                    page = input_dict["data"]['page']
+                    loginID = input_dict["data"]["loginID"]
+                    tasklist = Table("mw_task_lists", schema="mint_loan_admin")
+		    custcred = Table("mw_customer_login_credentials", schema="mint_loan")
+                    users = Table("mw_admin_user_master", schema="mint_loan_admin")
+                    loanmaster = Table("mw_client_loan_master", schema="mint_loan")
+                    loandetails = Table("mw_client_loan_details", schema="mint_loan")
+		    profile = Table("mw_client_profile", schema="mint_loan")
+                    loans = []
+                    q = Query.from_(tasklist).select(tasklist.star)
+                    indict = input_dict["data"]
+                    if indict["custID"]!="":
+                        q = q.where(tasklist.CUSTOMER_ID==indict["custID"])
+                        q1 = Query.from_(loanmaster).join(loandetails, how=JoinType.left).on(loanmaster.ID==loandetails.LOAN_MASTER_ID)
+                        q1 = q1.select(loanmaster.LOAN_REFERENCE_ID, loandetails.EXPECTED_MATURITY_DATE, loandetails.PRINCIPAL, loanmaster.STATUS)
+                        loans = db.runQuery(q1.where(loanmaster.CUSTOMER_ID==indict["custID"]))["data"]
+			q2 = Query.from_(custcred).join(profile, how=JoinType.left).on_field("CUSTOMER_ID")
+                        Data = db.runQuery(q2.select(custcred.LOGIN_ID, custcred.CUSTOMER_ID, profile.NAME).where(custcred.CUSTOMER_ID==indict["custID"]))["data"]
+                    if indict["loanID"]!="":
+                        q = q.where(tasklist.LOAN_REF_ID==indict["loanID"])
+                    if indict["loginID"]!="":
+                        q = q.where(tasklist.LOGIN_ID==indict["loginID"])
+                    if indict["status"]!="":
+                        q = q.where(tasklist.STATUS==indict["status"])
+                    if indict["fromDate"]:
+                        if indict["toDate"]:
+                            q = q.where(tasklist.TASK_DATETIME >= indict["fromDate"])#.where(tasklist.STATUS.notin(["COMPLETED", "CANCEL"]))
+                        else:
+                            q = q.where(tasklist.TASK_DATETIME > indict["fromDate"])#.where(tasklist.STATUS.notin(["COMPLETED", "CANCEL"]))
+                    if indict["toDate"]:
+                        q = q.where(tasklist.TASK_DATETIME < indict["toDate"])
+                        #if not indict["fromDate"]:
+                        #    q = q.where(tasklist.STATUS.notin(["COMPLETED", "CANCEL"]))
+                    elif indict["days"]>0:
+                        q = q.where(tasklist.TASK_DATETIME >= (datetime.now() - timedelta(days=indict["days"]-1)).strftime("%Y-%m-%d"))
+                    if indict["taskListID"]!="":
+                        q = q.where(tasklist.TASK_LIST_ID==indict["taskListID"])
+                    respdict = db.runQuery(q.orderby(tasklist.TASK_LIST_ID, order=Order.desc).limit("%i,%i"%(page["startIndex"], page["size"])))
+                    logins = Query.from_(users).select(users.LOGIN).where(users.ACCOUNT_STATUS=='A').orderby(users.CREATED_DATE, order=Order.desc)
+                    logins = [ele["LOGIN"] for ele in db.runQuery(logins)["data"]]
+                    token = generate(db).AuthToken()
+                    if token["updated"]:
+                        output_dict["data"]["tasks"] = utils.camelCase(respdict["data"])
+                        output_dict["data"]["loans"] = utils.camelCase(loans)
+                        output_dict["data"]["logins"] = logins
+                        output_dict["data"].update({"custData": utils.camelCase(Data[0]) if Data else {}})
+                        output_dict["data"].update({"error": 0, "message": success})
+                        output_dict["msgHeader"]["authToken"] = token["token"]
+                    else:
+                        output_dict["data"].update({"error":1, "message":errors["token"]})
+                resp.body = json.dumps(output_dict)
+                db._DbClose_()
+        except Exception as ex:
+            raise #falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+
+        
+
+
+
+

@@ -1,0 +1,98 @@
+2020-06-03 11:15:16|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "0"}, "msgHeader": {"authToken": "UWL4/mBMyJNlq890CSN1cONl.Fc7ZakYNWyykGAc3lDO!qCoIQoR0WlPLeDknfXVepAxf4yDA13Zd", "authLoginID": "admin@mintloan.com", "timestamp": 1591163115, "ipAddress": "127.0.1"}}
+2020-06-03 11:15:17|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": ""}
+
+2020-06-03 16:58:26|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "r5466jf.voClTDesRT54I.nbBEnPu5tQ3RNQhF6RD8Ve!qJ0FMqx1+WPLeDknfXVepIdKHV/04Lzy", "authLoginID": "admin@mintloan.com", "timestamp": 1591183706, "ipAddress": "127.0.1"}}
+2020-06-03 16:58:27|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "YudmIWgXaWKAykbUJue9S.7pCKkF0oIel2oGOnQaOW.O!qJ0FMqx1+WPLeDknfXVepE961aYHEc5K"}
+
+2020-06-03 16:58:42|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "YudmIWgXaWKAykbUJue9S.7pCKkF0oIel2oGOnQaOW.O!qJ0FMqx1+WPLeDknfXVepE961aYHEc5K", "authLoginID": "admin@mintloan.com", "timestamp": 1591183722, "ipAddress": "127.0.1"}}
+2020-06-03 16:58:43|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "onCceZZtQALQYtHCUGBOF.Wd5BS1FYlWXaRynQ8w6PWe!qJ0FMqx1+WPLeDknfXVepPRvedSC4M7E"}
+
+2020-06-03 16:58:49|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "onCceZZtQALQYtHCUGBOF.Wd5BS1FYlWXaRynQ8w6PWe!qJ0FMqx1+WPLeDknfXVepPRvedSC4M7E", "authLoginID": "admin@mintloan.com", "timestamp": 1591183726, "ipAddress": "127.0.1"}}
+2020-06-03 16:58:50|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "EEVO9elHNyY1OtEiz4E86uJ7chdBE0pOzMYba1pxF9qu!qJ0FMqx1+WPLeDknfXVepGvZ7Kr27m8h"}
+
+2020-06-03 16:59:44|DEBUG|13.126.16.154|investorUpdate:30|Request: {"data": {"customerID": "23", "update": [{"updateType": "clientDocument", "verificationStatus": "Y", "docSeqID": 964904, "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": ""}]}, "msgHeader": {"authToken": "EEVO9elHNyY1OtEiz4E86uJ7chdBE0pOzMYba1pxF9qu!qJ0FMqx1+WPLeDknfXVepGvZ7Kr27m8h", "authLoginID": "admin@mintloan.com", "timestamp": 1591183784, "ipAddress": "127.0.1"}}
+2020-06-03 16:59:45|ERROR|13.126.16.154|investorUpdate:248|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_client_update.py", line 78, in on_post
+    for element in input_dict["data"]["update"]["updateType"]:
+TypeError: list indices must be integers or slices, not str
+2020-06-03 17:03:47|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "23", "update": [{"updateType": "clientDocument", "verificationStatus": "N", "docSeqID": 964904, "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": ""}]}, "msgHeader": {"authToken": "EEVO9elHNyY1OtEiz4E86uJ7chdBE0pOzMYba1pxF9qu!qJ0FMqx1+WPLeDknfXVepGvZ7Kr27m8h", "authLoginID": "admin@mintloan.com", "timestamp": 1591184026, "ipAddress": "127.0.1"}}
+2020-06-03 17:03:47|INFO|13.126.16.154|investorUpdate:92|Updating document verification status
+2020-06-03 17:03:47|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "EEVO9elHNyY1OtEiz4E86uJ7chdBE0pOzMYba1pxF9qu!qJ0FMqx1+WPLeDknfXVepGvZ7Kr27m8h"}, "data": {"updated": {"clientDocument": [{"docSeqID": 964904, "success": 1, "successBank": 0}], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": ""}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-03 17:03:56|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": "EEVO9elHNyY1OtEiz4E86uJ7chdBE0pOzMYba1pxF9qu!qJ0FMqx1+WPLeDknfXVepGvZ7Kr27m8h", "authLoginID": "admin@mintloan.com", "timestamp": 1591184036, "ipAddress": "127.0.1"}}
+2020-06-03 17:03:57|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": ".WAu81XbM1tqvbWPDydrzOTg8sFdWeRzgEUr72T50/de!qJ0FMqx1+WPLeDknfXVepPHQh5neNSHZ"}
+
+2020-06-03 17:04:00|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "23"}, "msgHeader": {"authToken": ".WAu81XbM1tqvbWPDydrzOTg8sFdWeRzgEUr72T50/de!qJ0FMqx1+WPLeDknfXVepPHQh5neNSHZ", "authLoginID": "admin@mintloan.com", "timestamp": 1591184040, "ipAddress": "127.0.1"}}
+2020-06-03 17:04:01|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "97KEI5omzeBp/qPq8C5Aku3LrJFMeEvjF99JnIyu/.be!qJ0FMqx1+WPLeDknfXVepEIz8aybt90v"}
+
+2020-06-03 17:04:04|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "23", "update": [{"updateType": "clientDocument", "verificationStatus": "Y", "docSeqID": 964904, "accountNo": "", "accountStatus": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": ""}]}, "msgHeader": {"authToken": "97KEI5omzeBp/qPq8C5Aku3LrJFMeEvjF99JnIyu/.be!qJ0FMqx1+WPLeDknfXVepEIz8aybt90v", "authLoginID": "admin@mintloan.com", "timestamp": 1591184044, "ipAddress": "127.0.1"}}
+2020-06-03 17:04:05|INFO|13.126.16.154|investorUpdate:92|Updating document verification status
+2020-06-03 17:04:05|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "97KEI5omzeBp/qPq8C5Aku3LrJFMeEvjF99JnIyu/.be!qJ0FMqx1+WPLeDknfXVepEIz8aybt90v"}, "data": {"updated": {"clientDocument": [{"docSeqID": 964904, "success": 1, "successBank": 0}], "customerCredentials": "", "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": ""}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-03 17:04:23|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "80"}, "msgHeader": {"authToken": "97KEI5omzeBp/qPq8C5Aku3LrJFMeEvjF99JnIyu/.be!qJ0FMqx1+WPLeDknfXVepEIz8aybt90v", "authLoginID": "admin@mintloan.com", "timestamp": 1591184063, "ipAddress": "127.0.1"}}
+2020-06-03 17:04:24|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "8W/jDArJhiLJkd4csArGgefKMfxzTebR.ZTDAjCovu0e!qJ0FMqx1+WPLeDknfXVepD1wORAFO/Md"}
+
+2020-06-03 17:04:48|DEBUG|13.126.16.154|investorUpdate:32|Request: {"data": {"customerID": "80", "update": [{"updateType": "customerCredentials", "verificationStatus": "", "docSeqID": "", "accountNo": "", "bankID": "", "ActiveStatusFlag": "", "DefaultStatusFlag": "", "DeleteStatusFlag": "", "PersonalAccountFlag": "", "comments": "bank details on non-PMC bank required", "docComments": "BANK:102,106;", "stage": "AWAITING_LOAN_APPLICATION"}]}, "msgHeader": {"authToken": "8W/jDArJhiLJkd4csArGgefKMfxzTebR.ZTDAjCovu0e!qJ0FMqx1+WPLeDknfXVepD1wORAFO/Md", "authLoginID": "admin@mintloan.com", "timestamp": 1591184087, "ipAddress": "127.0.1"}}
+2020-06-03 17:04:48|INFO|13.126.16.154|investorUpdate:162|Updating account status
+2020-06-03 17:04:49|DEBUG|13.126.16.154|investorUpdate:457|Response: {"msgHeader": {"authToken": "zfglQ2ynabqbLRb9XoVW8e22gasry/ZLaP9ATBCZ8Age!qJ0FMqx1+WPLeDknfXVepCDCk3geXddJ"}, "data": {"updated": {"clientDocument": [], "customerCredentials": 1, "clientBank": "", "clientLoanLimit": "", "clientUberName": "", "clientUberNumber": "", "clientEmailID": "", "log": "", "uberData": "", "uberApi": ""}, "error": 0, "message": "Successfully updated"}}
+
+2020-06-03 17:04:49|DEBUG|13.126.16.154|customerDetails:29|Request: {"data": {"customerID": "80"}, "msgHeader": {"authToken": "zfglQ2ynabqbLRb9XoVW8e22gasry/ZLaP9ATBCZ8Age!qJ0FMqx1+WPLeDknfXVepCDCk3geXddJ", "authLoginID": "admin@mintloan.com", "timestamp": 1591184089, "ipAddress": "127.0.1"}}
+2020-06-03 17:04:50|DEBUG|13.126.16.154|customerDetails:178|Response: {"authToken": "2unA0mtTZ5vYuvzozturyuheBrjBZ9tSPYAhOWZlOSG.!qJ0FMqx1+WPLeDknfXVepEPh0ij8OEpl"}
+
+2020-06-03 17:05:05|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "80"}, "msgHeader": {"authToken": "2unA0mtTZ5vYuvzozturyuheBrjBZ9tSPYAhOWZlOSG.!qJ0FMqx1+WPLeDknfXVepEPh0ij8OEpl", "authLoginID": "admin@mintloan.com", "timestamp": 1591184105, "ipAddress": "127.0.1"}}
+2020-06-03 17:05:06|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "sEFYfaCOaWvrvKepcsVkmOjF8qiUeHnjPTdMvDCwE93.!qJ0FMqx1+WPLeDknfXVepI+4kewrIP+U"}
+
+2020-06-03 17:40:18|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "WuHSScvlJ1dBayXEBBETWOKfsM1Er.Dj2066YHGcbL9u!qJ0FMqx1+WPLeDknfXVepLdyEVLwDkM7", "authLoginID": "admin@mintloan.com", "timestamp": 1591186218, "ipAddress": "127.0.1"}}
+2020-06-03 17:40:29|ERROR|13.126.16.154|customerDetails:380|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_get_credit_eval_info.py", line 279, in on_post
+    (datetime.now()-iData[0][0]).days/7-1, 0, -1)] + [iData[0]]
+TypeError: 'float' object cannot be interpreted as an integer
+2020-06-03 17:42:49|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "FkpGA5blBiXoobEzpSkbKOdQZ1ylGBKTrJP661/6YdwO!qJ0FMqx1+WPLeDknfXVepMZ18GOhQtX5", "authLoginID": "admin@mintloan.com", "timestamp": 1591186369, "ipAddress": "127.0.1"}}
+2020-06-03 17:42:59|ERROR|13.126.16.154|customerDetails:380|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_get_credit_eval_info.py", line 295, in on_post
+    if d not in zip(*iData)[0]:
+TypeError: 'zip' object is not subscriptable
+2020-06-03 17:44:40|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "egyB/xigSBTVARh4gW8CMOVrdcJX0CWLSivuCerHyAt.!qJ0FMqx1+WPLeDknfXVepMuO/7RjrLy0", "authLoginID": "admin@mintloan.com", "timestamp": 1591186480, "ipAddress": "127.0.1"}}
+2020-06-03 17:44:49|ERROR|13.126.16.154|customerDetails:380|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_get_credit_eval_info.py", line 288, in on_post
+    for j in range(((iData[-1][0] - d).days)/7-1, 0, -1):
+TypeError: 'float' object cannot be interpreted as an integer
+2020-06-03 17:46:15|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "egyB/xigSBTVARh4gW8CMOVrdcJX0CWLSivuCerHyAt.!qJ0FMqx1+WPLeDknfXVepMuO/7RjrLy0", "authLoginID": "admin@mintloan.com", "timestamp": 1591186575, "ipAddress": "127.0.1"}}
+2020-06-03 17:46:16|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "Zzso505hOGpepD4xnQGk8eY0fgLLMpgtWGQnBKla.qme!qJ0FMqx1+WPLeDknfXVepG39uwviWiAS"}
+
+2020-06-03 17:46:19|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "Zzso505hOGpepD4xnQGk8eY0fgLLMpgtWGQnBKla.qme!qJ0FMqx1+WPLeDknfXVepG39uwviWiAS", "authLoginID": "admin@mintloan.com", "timestamp": 1591186579, "ipAddress": "127.0.1"}}
+2020-06-03 17:46:27|ERROR|13.126.16.154|customerDetails:380|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_get_credit_eval_info.py", line 290, in on_post
+    if d not in zip(*iData)[0]:
+TypeError: 'zip' object is not subscriptable
+2020-06-03 17:48:01|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "Zzso505hOGpepD4xnQGk8eY0fgLLMpgtWGQnBKla.qme!qJ0FMqx1+WPLeDknfXVepG39uwviWiAS", "authLoginID": "admin@mintloan.com", "timestamp": 1591186681, "ipAddress": "127.0.1"}}
+2020-06-03 17:48:02|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "hiJZuvWI5MEGRsS4lDSLN.n/pw9Fa.Axb9QCZoctBEpO!qJ0FMqx1+WPLeDknfXVepFCWC10/8o5a"}
+
+2020-06-03 17:48:04|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "hiJZuvWI5MEGRsS4lDSLN.n/pw9Fa.Axb9QCZoctBEpO!qJ0FMqx1+WPLeDknfXVepFCWC10/8o5a", "authLoginID": "admin@mintloan.com", "timestamp": 1591186685, "ipAddress": "127.0.1"}}
+2020-06-03 17:48:13|ERROR|13.126.16.154|customerDetails:380|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_get_credit_eval_info.py", line 316, in on_post
+    (10000 <= ((ele["PRINCIPAL"] for ele in loans["data"]) if loans["data"] else loanLimit["data"][0]["LOAN_LIMIT"] if loanLimit["data"] else 0))) else "0"
+TypeError: '<=' not supported between instances of 'int' and 'generator'
+2020-06-03 17:49:51|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "hiJZuvWI5MEGRsS4lDSLN.n/pw9Fa.Axb9QCZoctBEpO!qJ0FMqx1+WPLeDknfXVepFCWC10/8o5a", "authLoginID": "admin@mintloan.com", "timestamp": 1591186791, "ipAddress": "127.0.1"}}
+2020-06-03 17:49:52|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "PdYmOcaBf2/5tX3w6AyC3.3WrTzXL1/8uVxaPSbWFNb.!qJ0FMqx1+WPLeDknfXVepPNJ1SX/7gxw"}
+
+2020-06-03 17:49:54|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "PdYmOcaBf2/5tX3w6AyC3.3WrTzXL1/8uVxaPSbWFNb.!qJ0FMqx1+WPLeDknfXVepPNJ1SX/7gxw", "authLoginID": "admin@mintloan.com", "timestamp": 1591186794, "ipAddress": "127.0.1"}}
+2020-06-03 17:50:02|ERROR|13.126.16.154|customerDetails:380|ExecutionError: 
+Traceback (most recent call last):
+  File "apis/ml_get_credit_eval_info.py", line 373, in on_post
+    resp.body = json.dumps(output_dict, encoding='unicode-escape')
+  File "/root/anaconda3/lib/python3.7/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+TypeError: __init__() got an unexpected keyword argument 'encoding'
+2020-06-03 17:50:32|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "PdYmOcaBf2/5tX3w6AyC3.3WrTzXL1/8uVxaPSbWFNb.!qJ0FMqx1+WPLeDknfXVepPNJ1SX/7gxw", "authLoginID": "admin@mintloan.com", "timestamp": 1591186832, "ipAddress": "127.0.1"}}
+2020-06-03 17:50:33|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "OztsJA25BnfPw0J/V/pMUe1R8KeWmOUxASwDZkum8pRO!qJ0FMqx1+WPLeDknfXVepNypBUPKd6xZ"}
+
+2020-06-03 17:50:36|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "OztsJA25BnfPw0J/V/pMUe1R8KeWmOUxASwDZkum8pRO!qJ0FMqx1+WPLeDknfXVepNypBUPKd6xZ", "authLoginID": "admin@mintloan.com", "timestamp": 1591186836, "ipAddress": "127.0.1"}}
+2020-06-03 17:50:44|DEBUG|13.126.16.154|customerDetails:375|Response: {"authToken": "M6PlVL.DbosSKru2Q0ewMumBTk5D0hRh.GpJvbdVpdke!qJ0FMqx1+WPLeDknfXVepJxBeJPTR5Dh"}
+

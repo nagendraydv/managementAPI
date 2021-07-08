@@ -1,0 +1,90 @@
+from mintloan_utils import DB, utils, datetime, timedelta, validate, generate
+import requests, json
+from pypika import Query, Table, JoinType, functions, Order
+
+
+class GetUpfrontLoanLimitResource:
+
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+
+        try:
+            raw_json = req.stream.read()
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Error', ex.message)
+
+    def on_post(self, req, resp):
+        """Handles POST requests"""
+        output_dict = {"data":{"generalLimit":0, "mobileLimit":0, "upfrontLimitSet":"0"}, "msgHeader":{"authToken" : ""} }
+        errors = utils.errors
+        success = "Login success"
+        logInfo = {'api': 'setLoanLimit'}
+        try:
+            raw_json = req.stream.read()
+            input_dict = json.loads(raw_json, encoding='utf-8')
+            utils.logger.debug("Request: " + json.dumps(input_dict), extra=logInfo)
+	    print input_dict
+        except Exception as ex:
+            raise falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')
+        try:
+            if not validate.Request(api='loanLimit', request=input_dict):
+                output_dict["data"].update({"error":1, "message":errors["json"]})
+                resp.body = json.dumps(output_dict)
+            else:
+                db=DB(input_dict["msgHeader"]["authLoginID"])#, filename='mysql-slave.config')
+                dbw = DB(input_dict["msgHeader"]["authLoginID"])
+                val_error = validate(db).basicChecks(token=input_dict["msgHeader"]["authToken"], checkToken=False)
+                if val_error:
+                    output_dict["data"].update({"error":1, "message":val_error})
+                    resp.body = json.dumps(output_dict)
+                else:
+                    custID = input_dict["data"]["customerID"]
+                    prof = Table("mw_client_profile", schema="mint_loan")
+                    lm = Table("mw_client_loan_master", schema="mint_loan")
+                    ld = Table("mw_client_loan_details", schema="mint_loan")
+                    loanlimit = Table("mw_client_loan_limit", schema="mint_loan")
+                    ll = db.runQuery(Query.from_(loanlimit).select(loanlimit.star).where(loanlimit.CUSTOMER_ID==custID))["data"]
+                    if not ll:
+                        #wexp = db.runQuery(Query.from_(prof).select("WORK_EXPERIENCE", "COMPANY_NAME").where(prof.CUSTOMER_ID==custID))
+                        #wexp, comp = (wexp["data"][0]["WORK_EXPERIENCE"], wexp["data"][0]["COMPANY_NAME"]) if wexp["data"] else (0, "")
+                        wexp, comp = input_dict["data"]["workExp"], input_dict["data"]["companyName"]
+                        grade = (input_dict["data"]["grade"] if "grade" in input_dict["data"] else "0")
+                        sal = (input_dict["data"]["monthlyIncome"] if "monthlyIncome" in input_dict["data"] else "0")
+                        genLimit = 0
+                        mobLimit = 0
+                        if comp in ('UBER_AUTO', 'uber-auto', 'UBER AUTO'):
+                            mobLimit = "5500"
+                        elif comp in ('swiggy', 'SWIGGY', 'Swiggy'):
+                            genLimit = "2500"
+                        elif comp in ('Feedback Infra', 'Feedback Highways OMT', 'FHOMT', 'FIPL', 'FEDCO', 'FPOM', 'Med Plus'):
+                            if grade in ("1", "2", "3", 1, 2, 3):
+                                genLimit = str(min(2*int(sal), 20000))
+                            elif grade in ("4", "5", 4, 5):
+                                genLimit = str(min(2*int(sal), 15000))
+                            else:
+                                genLimit = str(min(2*int(sal), 10000))
+                        else:
+                            genLimit = "5000" if ((wexp<6) and (wexp>=3)) else "5000" if wexp>=6 else "5000"
+                        x = dbw.Insert(db="mint_loan", table="mw_client_loan_limit", CUSTOMER_ID=custID, LOAN_LIMIT=genLimit, date=False,
+                                  compulsory=False, MOBILE_LOAN_LIMIT=mobLimit, ARCHIVED='N', CREATED_BY='ADMIN',
+                                  CREATED_DATE=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+			print x
+                    else:
+                        genLimit, mobLimit = ll[0]["LOAN_LIMIT"], ll[0]["MOBILE_LOAN_LIMIT"]
+                    q = Query.from_(lm).select(functions.Count(lm.star).as_("c")).where(lm.CUSTOMER_ID==custID)
+                    loans = db.runQuery(q.where(lm.STATUS.notin(['REJECTED', 'ML_REJECTED', 'REQUESTED'])))["data"]                    
+                    token = generate(dbw).AuthToken()
+                    if token["updated"]:
+                        output_dict["data"]["generalLimit"] = genLimit
+                        output_dict["data"]["mobileLimit"] = mobLimit
+                        output_dict["data"]["upfrontLimitSet"] = (0 if ll else 1)
+                        output_dict["msgHeader"]["authToken"] = token["token"]
+                        output_dict["data"].update({"error":0, "message":""})
+                    else:
+                        output_dict["data"].update({"error":1, "message":errors["query"]})
+                    resp.body = json.dumps(output_dict, encoding='unicode-escape')
+                    utils.logger.debug("Response: " + json.dumps(output_dict) + "\n", extra=logInfo)
+                    db._DbClose_()
+        except:
+            utils.logger.error("ExecutionError: ", extra=logInfo, exc_info=True)
+            raise falcon.HTTPError(falcon.HTTP_400,'Invalid JSON', 'The JSON was incorrect.')

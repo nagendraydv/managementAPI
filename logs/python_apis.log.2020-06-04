@@ -1,0 +1,21 @@
+2020-06-04 17:56:29|DEBUG|13.126.16.154|custBankDetails:29|Request: {"data": {"toDate": "", "days": 1, "repayStatus": [], "fromDate": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "8x4B4kYXWV/WJCzq.y4qCuslYChmYhVvePP/rTVNNVQO!ZLbp9z6oNkzLeDknfXVepJlgWOVv0xMF", "authLoginID": "admin@mintloan.com", "timestamp": 1591273589, "ipAddress": "127.0.1"}}
+2020-06-04 17:56:30|DEBUG|13.126.16.154|custBankDetails:78|Response: {"authToken": "Kyu5VVCl6M7D8ZTYVKlwTuf0jcyFCsfoucSya8HFBc.e!ZLbp9z6oNkzLeDknfXVepKXCIWDje4QY"}
+
+2020-06-04 17:57:10|DEBUG|13.126.16.154|customerIncome:30|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "cwxSiU4baHL85siVd9bBS.fhwDUmdtAqGxOqpL7nGnge!ZLbp9z6oNkzLeDknfXVepCYTENPzIM8h", "authLoginID": "admin@mintloan.com", "timestamp": 1591273630, "ipAddress": "127.0.1"}}
+2020-06-04 17:57:11|ERROR|13.126.16.154|customerIncome:171|ExecutionError: 
+Traceback (most recent call last):
+  File "/home/centos/mint/apis/ml_get_customer_income.py", line 126, in on_post
+    for j in range(((iData[-1][0] - d).days)/7-1, 0, -1):
+TypeError: 'float' object cannot be interpreted as an integer
+2020-06-04 17:58:32|DEBUG|13.126.16.154|customerIncome:30|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "iXiTfjFP.Su51HEsPylQRudYX3DhO8CkqnBmy8UG6Rdu!ZLbp9z6oNkzLeDknfXVepFguc38DYQC3", "authLoginID": "admin@mintloan.com", "timestamp": 1591273712, "ipAddress": "127.0.1"}}
+2020-06-04 17:58:33|ERROR|13.126.16.154|customerIncome:171|ExecutionError: 
+Traceback (most recent call last):
+  File "/home/centos/mint/apis/ml_get_customer_income.py", line 126, in on_post
+    for j in range(((iData[-1][0] - d).days)/7-1, 0, -1):
+TypeError: 'float' object cannot be interpreted as an integer
+2020-06-04 18:00:10|DEBUG|13.126.16.154|customerIncome:30|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "A4lX/qKoPrkyZryo2mxuueIAfcAwRusZKEzYA.V5p1TO!ZLbp9z6oNkzLeDknfXVepJnQzpDchy8L", "authLoginID": "admin@mintloan.com", "timestamp": 1591273810, "ipAddress": "127.0.1"}}
+2020-06-04 18:00:11|DEBUG|13.126.16.154|customerIncome:166|Response: {"authToken": "NqY3BCj.0DIG86Ndy7WtGO1/svBIaB7z3D66G2NWOiKu!ZLbp9z6oNkzLeDknfXVepLJgyzESWW1M"}
+
+2020-06-04 18:00:16|DEBUG|13.126.16.154|customerDetails:32|Request: {"data": {"toDate": "", "days": 0, "loanID": "", "fromDate": "", "status": "", "loginID": "", "page": {"startIndex": 0, "size": 1}, "customerID": "23"}, "msgHeader": {"authToken": "NqY3BCj.0DIG86Ndy7WtGO1/svBIaB7z3D66G2NWOiKu!ZLbp9z6oNkzLeDknfXVepLJgyzESWW1M", "authLoginID": "admin@mintloan.com", "timestamp": 1591273816, "ipAddress": "127.0.1"}}
+2020-06-04 18:00:24|DEBUG|13.126.16.154|customerDetails:375|Response: {"authToken": "..bHaI0ng8G/WF1UgWfPP./XJnxeVU5rhqHPy4aRlm5e!ZLbp9z6oNkzLeDknfXVepFXsvWxtihnQ"}
+

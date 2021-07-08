@@ -1,0 +1,204 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Fri May  8 12:19:04 2020
+
+@author: nagendra
+"""
+
+import falcon,sys
+sys.path.append("/home/nagendra/Downloads/mint_new/mint/apis")
+from falcon_multipart.middleware import MultipartMiddleware
+from ml_login import LoginResource,ForceLoginResource
+from ml_dashboard import DashboardResource
+from ml_aadhar_kyc_fill import AadharFillResource
+from ml_get_agreement_list import GetAgreementListResource
+from ml_create_repayment_info import CreateRepaymentInfoResource
+from ml_approve_loan import ApproveLoanResource
+from ml_client_registration import ClientRegisterResource
+from ml_repayment_data import repaymentDataResource
+from ml_create_task import CreateTaskResource
+from ml_customer_details import CustDetailsResource
+from ml_dashboard_backoffice import DashboardBackofficeResource
+from ml_dashboard_outcall_team import DashboardOutcallResource
+from ml_dashboard_verification_team import DashboardVerificationTeamResource
+from ml_disburse_loan import DisburseLoanResource
+from ml_get_available_cities import GetAvailableCitiesResource
+from ml_get_available_products import GetAvailableProductsResource
+from ml_get_bank_ifsc_details import GetBankIfscDetailsResource
+from ml_get_company_city_product_details import GetCompanyCityProductDetailsResource
+from ml_get_credit_eval_info import CreditEvalInfoResource
+from ml_get_cust_audit_trail import GetCustAuditTrailResource
+from ml_get_cust_bank_details import CustBankDetailsResource
+from ml_get_customer_documents import GetCustDocumentsResource
+from ml_get_customer_extended_details import CustExtendedDetailsResource
+from ml_get_customer_income import CustIncomeDetailsResource
+from ml_get_customer_investments import GetCustInvestmentsResource
+from ml_get_cust_stages import GetCustStagesResource
+from ml_get_document_types import GetDocumentTypesResource
+from ml_get_first_loan_limit import GetUpfrontLoanLimitResource
+from ml_get_insurance_products import GetInsuranceProductsResource
+from ml_get_lender import GetLenderResource
+from ml_get_product_loan_details import GetProductLoanDetailsResource
+from ml_get_resolution_list import GetInteractionResolutionsResource 
+from ml_get_standard_query_list import GetStandardQueryListResource
+from ml_get_tyre_loan_limit import GetTyreLoanLimitResource
+from ml_get_uber_auth import GetUberAuthResource
+from ml_get_unidentified_uber_data import GetUnidentifiedUberDataResource
+from ml_insert_bank_ifsc_details import InsertBankIfscDetailsResource
+from ml_show_mandate_data import ShowMandateDataResource
+from ml_show_finflux_insert_log import ShowFinfluxInsertLogResource
+from ml_show_repay_info import ShowRepayInfoResource
+from ml_show_task import ShowTaskResource
+from ml_uber_average_income_by_city import UberAvgIncByCityResource
+from ml_update_loan_status import UpdateLoanStatusResource
+from ml_update_repay_info import UpdateRepayInfoResource
+from ml_search_user import SearchUserResource
+from ml_zero_folio_creation import ZeroFolioCreationResource
+from mw_get_customerId_count import customerIdCount
+from mw_search_customer_id import SearchCustomerIdResource
+from ml_client_update import ClientUpdateResource
+from ml_generate_cust_csv import CustReportResource
+from ml_insert_uber_repay_info import UberPaymentsUploadResource
+from ml_insert_trans_id import InsertTransIDResource
+from ml_insert_finflux_repayment import RepaymentsBulkUploadResource
+from ml_contact_read import ContactReadResource
+from ml_create_call_info import CreateCallInfoResource
+from ml_generate_mandate_payment_order import MandatePaymentOrderResource
+from ml_generate_payment_disbursal_report import PaymentDisbursalReportResource
+from ml_generate_refund_report import RefundReportResource
+from ml_generate_uber_payment_order import UberPaymentOrderResource
+from ml_reject_loan import RejectLoanResource 
+from ml_reliace_offline_purchase import RelianceOfflinePurchaseResource
+from ml_stage_sync import StageSyncResource
+from ml_store_customer_data import StoreCustomerDataResource
+#from ml_get_customer_details import CustDetailsResource
+app=falcon.API(middleware=[MultipartMiddleware()])
+login=LoginResource()
+forcelogin=ForceLoginResource()
+DashboardResource=DashboardResource()
+AadharFillResource=AadharFillResource()
+GetAgreementListResource=GetAgreementListResource()
+CreateRepaymentInfoResource=CreateRepaymentInfoResource()
+ApproveLoanResource=ApproveLoanResource()
+ClientRegisterResource=ClientRegisterResource()
+repaymentDataResource=repaymentDataResource()
+CreateTaskResource=CreateTaskResource()
+CustDetailsResource=CustDetailsResource()
+DashboardBackofficeResource=DashboardBackofficeResource()
+DashboardOutcallResource=DashboardOutcallResource()
+DashboardVerificationTeamResource=DashboardVerificationTeamResource()
+DisburseLoanResource=DisburseLoanResource()
+GetAvailableCitiesResource=GetAvailableCitiesResource()
+GetAvailableProductsResource=GetAvailableProductsResource()
+GetBankIfscDetailsResource=GetBankIfscDetailsResource()
+GetCompanyCityProductDetailsResource=GetCompanyCityProductDetailsResource()
+CreditEvalInfoResource=CreditEvalInfoResource()
+GetCustAuditTrailResource=GetCustAuditTrailResource()
+CustBankDetailsResource=CustBankDetailsResource()
+GetCustDocumentsResource=GetCustDocumentsResource()
+CustExtendedDetailsResource=CustExtendedDetailsResource()
+CustIncomeDetailsResource=CustIncomeDetailsResource()
+GetCustInvestmentsResource=GetCustInvestmentsResource()
+GetCustStagesResource=GetCustStagesResource()
+GetDocumentTypesResource=GetDocumentTypesResource()
+GetUpfrontLoanLimitResource=GetUpfrontLoanLimitResource()
+GetInsuranceProductsResource=GetInsuranceProductsResource()
+GetLenderResource=GetLenderResource()
+GetProductLoanDetailsResource=GetProductLoanDetailsResource()
+GetInteractionResolutionsResource=GetInteractionResolutionsResource()
+GetStandardQueryListResource=GetStandardQueryListResource()
+GetTyreLoanLimitResource=GetTyreLoanLimitResource()
+GetUberAuthResource=GetUberAuthResource()
+GetUnidentifiedUberDataResource=GetUnidentifiedUberDataResource()
+InsertBankIfscDetailsResource=InsertBankIfscDetailsResource()
+ShowMandateDataResource=ShowMandateDataResource()
+ShowFinfluxInsertLogResource=ShowFinfluxInsertLogResource()
+ShowRepayInfoResource=ShowRepayInfoResource()
+ShowTaskResource=ShowTaskResource()
+UberAvgIncByCityResource=UberAvgIncByCityResource()
+UpdateLoanStatusResource=UpdateLoanStatusResource()
+UpdateRepayInfoResource=UpdateRepayInfoResource()
+SearchUserResource=SearchUserResource()
+ZeroFolioCreationResource=ZeroFolioCreationResource()
+customerIdCount=customerIdCount()
+SearchCustomerIdResource=SearchCustomerIdResource()
+ClientUpdateResource=ClientUpdateResource()
+CustReportResource=CustReportResource()
+UberPaymentsUploadResource=UberPaymentsUploadResource()
+InsertTransIDResource=InsertTransIDResource()
+RepaymentsBulkUploadResource=RepaymentsBulkUploadResource()
+ContactReadResource=ContactReadResource()
+CreateCallInfoResource=CreateCallInfoResource()
+MandatePaymentOrderResource=MandatePaymentOrderResource()
+PaymentDisbursalReportResource=PaymentDisbursalReportResource()
+RefundReportResource=RefundReportResource()
+UberPaymentOrderResource=UberPaymentOrderResource()
+RejectLoanResource=RejectLoanResource()
+RelianceOfflinePurchaseResource=RelianceOfflinePurchaseResource()
+StageSyncResource=StageSyncResource()
+StoreCustomerDataResource=StoreCustomerDataResource()
+app.add_route('/login',login)
+app.add_route('/forcelogin',forcelogin)
+app.add_route('/DashboardResource',DashboardResource)
+app.add_route('/AadharFillResource',AadharFillResource)
+app.add_route('/GetAgreementListResource',GetAgreementListResource)
+app.add_route('/CreateRepaymentInfoResource',CreateRepaymentInfoResource)
+app.add_route('/ApproveLoanResource',ApproveLoanResource)
+app.add_route('/ClientRegisterResource',ClientRegisterResource)
+app.add_route('/repaymentDataResource',repaymentDataResource)
+app.add_route('/CreateTaskResource',CreateTaskResource)
+app.add_route('/CustDetailsResource',CustDetailsResource)
+app.add_route('/DashboardBackofficeResource',DashboardBackofficeResource)
+app.add_route('/DashboardOutcallResource',DashboardOutcallResource)
+app.add_route('/DashboardVerificationTeamResource',DashboardVerificationTeamResource)
+app.add_route('/DisburseLoanResource',DisburseLoanResource)
+app.add_route('/GetAvailableCitiesResource',GetAvailableCitiesResource)
+app.add_route('/GetAvailableProductsResource',GetAvailableProductsResource)
+app.add_route('/GetBankIfscDetailsResource',GetBankIfscDetailsResource)
+app.add_route('/GetCompanyCityProductDetailsResource',GetCompanyCityProductDetailsResource)
+app.add_route('/CreditEvalInfoResource',CreditEvalInfoResource)
+app.add_route('/GetCustAuditTrailResource',GetCustAuditTrailResource)
+app.add_route('/CustBankDetailsResource',CustBankDetailsResource)
+app.add_route('/GetCustDocumentsResource',GetCustDocumentsResource)
+app.add_route('/CustExtendedDetailsResource',CustExtendedDetailsResource)
+app.add_route('/CustIncomeDetailsResource',CustIncomeDetailsResource)
+app.add_route('/GetCustInvestmentsResource',GetCustInvestmentsResource)
+app.add_route('/GetCustStagesResource',GetCustStagesResource)
+app.add_route('/GetDocumentTypesResource',GetDocumentTypesResource)
+app.add_route('/GetUpfrontLoanLimitResource',GetUpfrontLoanLimitResource)
+app.add_route('/GetInsuranceProductsResource',GetInsuranceProductsResource)
+app.add_route('/GetLenderResource',GetLenderResource)
+app.add_route('/GetProductLoanDetailsResource',GetProductLoanDetailsResource)
+app.add_route('/GetInteractionResolutionsResource',GetInteractionResolutionsResource)
+app.add_route('/GetStandardQueryListResource',GetStandardQueryListResource)
+app.add_route('/GetTyreLoanLimitResource',GetTyreLoanLimitResource)
+app.add_route('/GetUberAuthResource',GetUberAuthResource)
+app.add_route('/GetUnidentifiedUberDataResource',GetUnidentifiedUberDataResource)
+app.add_route('/InsertBankIfscDetailsResource',InsertBankIfscDetailsResource)
+app.add_route('/ShowMandateDataResource',ShowMandateDataResource)
+app.add_route('/ShowFinfluxInsertLogResource',ShowFinfluxInsertLogResource)
+app.add_route('/ShowRepayInfoResource',ShowRepayInfoResource)
+app.add_route('/ShowTaskResource',ShowTaskResource)
+app.add_route('/UberAvgIncByCityResource',UberAvgIncByCityResource)
+app.add_route('/UpdateLoanStatusResource',UpdateLoanStatusResource)
+app.add_route('/UpdateRepayInfoResource',UpdateRepayInfoResource)
+app.add_route('/SearchUserResource',SearchUserResource)
+app.add_route('/ZeroFolioCreationResource',ZeroFolioCreationResource)
+app.add_route('/customerIdCount',customerIdCount)
+app.add_route('/SearchCustomerIdResource',SearchCustomerIdResource)
+app.add_route('/ClientUpdateResource',ClientUpdateResource)
+app.add_route('/CustReportResource',CustReportResource)
+app.add_route('/UberPaymentsUploadResource',UberPaymentsUploadResource)
+app.add_route('/InsertTransIDResource',InsertTransIDResource)
+app.add_route('/RepaymentsBulkUploadResource',RepaymentsBulkUploadResource)
+app.add_route('/ContactReadResource',ContactReadResource)
+app.add_route('/CreateCallInfoResource',CreateCallInfoResource)
+app.add_route('/MandatePaymentOrderResource',MandatePaymentOrderResource)
+app.add_route('/PaymentDisbursalReportResource',PaymentDisbursalReportResource)
+app.add_route('/RefundReportResource',RefundReportResource)
+app.add_route('/UberPaymentOrderResource',UberPaymentOrderResource)
+app.add_route('/RejectLoanResource',RejectLoanResource)
+app.add_route('/RelianceOfflinePurchaseResource',RelianceOfflinePurchaseResource)
+app.add_route('/StageSyncResource',StageSyncResource)
+app.add_route('/StoreCustomerDataResource',StoreCustomerDataResource)
